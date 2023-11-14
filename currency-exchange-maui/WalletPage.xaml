@@ -19,7 +19,7 @@
                        Margin="0,5"
                        TextColor="{StaticResource KWhite}" />
 
-                <Label Text="zł 4,505.46"
+                <Label Text="PLN 4,505.46"
                        FontSize="38"
                        FontAttributes="Bold"
                        Margin="0,5"
@@ -27,7 +27,7 @@
 
                 <StackLayout Orientation="Horizontal"
                              Margin="0,5">
-                    <Label Text="+ zł 362.45   "
+                    <Label Text="+ PLN 362.45   "
                            TextColor="{StaticResource KWhite}"
                            FontSize="18" />
                     <Label Text="6.25%"
@@ -121,12 +121,12 @@
                                            VerticalOptions="Center" />
 
                                     <Label Grid.Column="1" Grid.Row="1"
-                                           Text="zł 1,156.99"
+                                           Text="PLN 1,156.99"
                                            TextColor="{AppThemeBinding Light={StaticResource KPrimary}, Dark={StaticResource KWhite}}"
                                            VerticalOptions="Center" />
 
                                     <Label Grid.Column="2" Grid.Row="0"
-                                           Text="£ 1,420.22"
+                                           Text="1,420.22"
                                            FontSize="18"
                                            FontAttributes="Bold"
                                            VerticalOptions="Center"
