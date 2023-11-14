@@ -40,5 +40,21 @@
     <Color x:Key="Blue100Accent">#3E8EED</Color>
     <Color x:Key="Blue200Accent">#72ACF1</Color>
     <Color x:Key="Blue300Accent">#A7CBF6</Color>
+    
+    <!-- Custom Colors-->
+    <Color x:Key="KPrimary">#484A4C</Color>
+    <Color x:Key="KSecondary">#171514</Color>
+    <Color x:Key="KAccent">#263996</Color>
+    <Color x:Key="KWhite">#f0f0f0</Color>
+    <Color x:Key="KPositive">#7cc9a4</Color>
+    <Color x:Key="KNegative">#ed6868</Color>
+    
+    <!-- Custom Brushes -->
+    <SolidColorBrush x:Key="KPrimaryBrush">#717171</SolidColorBrush>
+    <SolidColorBrush x:Key="KSecondaryBrush">#171514</SolidColorBrush>
+    <SolidColorBrush x:Key="KAccentBrush">#263996</SolidColorBrush>
+    <SolidColorBrush x:Key="KWhiteBrush">#f0f0f0</SolidColorBrush>
+    <SolidColorBrush x:Key="KPositiveBrush">#7cc9a4</SolidColorBrush>
+    <SolidColorBrush x:Key="KNegativeBrush">#ed6868</SolidColorBrush>
 
 </ResourceDictionary>

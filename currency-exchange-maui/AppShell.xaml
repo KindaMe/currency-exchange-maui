@@ -4,11 +4,30 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:currency_exchange_maui"
-    Shell.FlyoutBehavior="Disabled">
+    Shell.FlyoutBehavior="Disabled"
+    Shell.NavBarIsVisible="False" 
+    Shell.TabBarTitleColor="{StaticResource KPrimary}"
+    Shell.TabBarBackgroundColor="{AppThemeBinding Light={StaticResource KWhite}, Dark={StaticResource KSecondary}}">
+    
+    <TabBar>
+        
+        <ShellContent
+            Title="Wallet"
+            Icon="dotnet_bot.png"
+            ContentTemplate="{DataTemplate local:WalletPage}"
+            Route="WalletPage" />
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+        <ShellContent
+            Title="Rates"
+            Icon="dotnet_bot.png"
+            ContentTemplate="{DataTemplate local:RatesPage}"
+            Route="RatesPage" />
+
+        <ShellContent
+            Title="Profile"
+            Icon="dotnet_bot.png"
+            ContentTemplate="{DataTemplate local:ProfilePage}"
+            Route="ProfilePage" />
+    </TabBar>
 
 </Shell>

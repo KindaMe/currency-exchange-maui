@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="currency_exchange_maui.WalletPage">
+    <ContentPage.Content>
+
+        <Grid BackgroundColor="{StaticResource KSecondary}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <StackLayout Grid.Row="0"
+                         Margin="20,30,20,20">
+
+                <Label Text="Total Balance"
+                       FontSize="18"
+                       Margin="0,5"
+                       TextColor="{StaticResource KWhite}" />
+
+                <Label Text="zł 4,505.46"
+                       FontSize="38"
+                       FontAttributes="Bold"
+                       Margin="0,5"
+                       TextColor="{StaticResource KWhite}" />
+
+                <StackLayout Orientation="Horizontal"
+                             Margin="0,5">
+                    <Label Text="+ zł 362.45   "
+                           TextColor="{StaticResource KWhite}"
+                           FontSize="18" />
+                    <Label Text="6.25%"
+                           TextColor="{StaticResource KPositive}"
+                           FontSize="18" />
+                </StackLayout>
+
+                <Grid HorizontalOptions="Fill"
+                      Margin="0,30,0,10"
+                      ColumnSpacing="20">
+                    <Grid.Resources>
+                        <Style TargetType="Button">
+                            <Setter Property="BackgroundColor"
+                                    Value="{AppThemeBinding Light={StaticResource KPrimary}, Dark={StaticResource KPrimary}}" />
+                            <Setter Property="TextColor"
+                                    Value="{AppThemeBinding Light={StaticResource KWhite}, Dark={StaticResource KWhite}}" />
+                            <Setter Property="FontAttributes" Value="Bold" />
+                            <Setter Property="CornerRadius" Value="15" />
+                            <Setter Property="MinimumHeightRequest" Value="55" />
+                            <Setter Property="FontSize" Value="18" />
+                        </Style>
+                    </Grid.Resources>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Column="0"
+                            Text="Buy" />
+                    <Button Grid.Column="1"
+                            Text="Sell" />
+                </Grid>
+            </StackLayout>
+
+            <Border Grid.Row="1"
+                    Padding="20,20,20,0"
+                    Margin="-3,0,-3,-3"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource KWhite}, Dark={StaticResource KSecondary}}">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="21,21,0,0" />
+                </Border.StrokeShape>
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Row="0"
+                           Text="My Portfolios"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           Padding="0,0,0,20" />
+
+                    <CollectionView Grid.Row="1"
+                                    ItemsSource="{Binding TestContent}">
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+
+                                <Grid Margin="3,0,3,3">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+
+                                    <Frame Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"
+                                           CornerRadius="25"
+                                           Margin="0,0,10,0"
+                                           WidthRequest="50"
+                                           HeightRequest="50">
+
+                                        <Image Source="flag_20x30.jpg"
+                                               VerticalOptions="Fill"
+                                               Margin="0"
+                                               WidthRequest="80"
+                                               HeightRequest="80" />
+                                    </Frame>
+
+                                    <Label Grid.Column="1" Grid.Row="0"
+                                           Text="GBP"
+                                           FontSize="18"
+                                           FontAttributes="Bold"
+                                           VerticalOptions="Center" />
+
+                                    <Label Grid.Column="1" Grid.Row="1"
+                                           Text="zł 1,156.99"
+                                           TextColor="{AppThemeBinding Light={StaticResource KPrimary}, Dark={StaticResource KWhite}}"
+                                           VerticalOptions="Center" />
+
+                                    <Label Grid.Column="2" Grid.Row="0"
+                                           Text="£ 1,420.22"
+                                           FontSize="18"
+                                           FontAttributes="Bold"
+                                           VerticalOptions="Center"
+                                           HorizontalTextAlignment="End" />
+
+                                    <Label Grid.Column="2" Grid.Row="1"
+                                           Text="1.16%"
+                                           TextColor="{StaticResource KPositive}"
+                                           VerticalOptions="Center"
+                                           HorizontalTextAlignment="End" />
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </Grid>
+            </Border>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
