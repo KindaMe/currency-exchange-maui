@@ -10,12 +10,25 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <Label Grid.Row="0" 
-                   Text="Profile" 
-                   FontSize="38" 
-                   FontAttributes="Bold" 
+            <Label Grid.Row="0"
+                   Text="Profile"
+                   FontSize="38"
+                   FontAttributes="Bold"
                    Margin="20"
                    TextColor="{AppThemeBinding Light={StaticResource KSecondary}, Dark={StaticResource KWhite}}" />
+
+            <StackLayout Grid.Row="1" VerticalOptions="Start">
+                <Button Text="Logout"
+                        Clicked="OnLogoutButtonClicked"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource KPrimary}, Dark={StaticResource KPrimary}}"
+                        TextColor="{AppThemeBinding Light={StaticResource KWhite}, Dark={StaticResource KWhite}}"
+                        FontAttributes="Bold"
+                        CornerRadius="15"
+                        MinimumHeightRequest="55"
+                        FontSize="18"
+                        Margin="20" />
+
+            </StackLayout>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

@@ -58,7 +58,7 @@
                     <Button Grid.Column="0"
                             Text="Buy" />
                     <Button Grid.Column="1"
-                            Text="Sell" />
+                            Text="Withdraw" />
                 </Grid>
             </StackLayout>
 
