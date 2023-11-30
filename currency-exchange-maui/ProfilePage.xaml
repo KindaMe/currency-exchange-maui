@@ -8,6 +8,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
 
             <Label Grid.Row="0"
@@ -18,17 +19,113 @@
                    TextColor="{AppThemeBinding Light={StaticResource KSecondary}, Dark={StaticResource KWhite}}" />
 
             <StackLayout Grid.Row="1" VerticalOptions="Start">
-                <Button Text="Logout"
-                        Clicked="OnLogoutButtonClicked"
-                        BackgroundColor="{AppThemeBinding Light={StaticResource KPrimary}, Dark={StaticResource KPrimary}}"
-                        TextColor="{AppThemeBinding Light={StaticResource KWhite}, Dark={StaticResource KWhite}}"
-                        FontAttributes="Bold"
-                        CornerRadius="15"
-                        MinimumHeightRequest="55"
-                        FontSize="18"
-                        Margin="20" />
 
+                <Grid Margin="20,0" ColumnSpacing="20" RowSpacing="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Frame Grid.Column="0"
+                           Grid.Row="0"
+                           Grid.RowSpan="3"
+                           CornerRadius="100"
+                           BackgroundColor="{AppThemeBinding Light={StaticResource KWhite}, Dark={StaticResource KPrimary}}">
+                        <Image Source="dotnet_bot.svg"
+                               WidthRequest="50"
+                               HeightRequest="50" />
+                    </Frame>
+
+                    <Label Grid.Column="1"
+                           Grid.Row="0"
+                           Text="FName LName"
+                           FontSize="22"
+                           FontAttributes="Bold"
+                           HorizontalTextAlignment="Start"
+                           VerticalTextAlignment="Center" />
+
+                    <Label Grid.Column="1"
+                           Grid.Row="1"
+                           Text="Email"
+                           FontSize="18"
+                           HorizontalTextAlignment="Start"
+                           VerticalTextAlignment="Center" />
+
+                    <Label Grid.Column="1"
+                           Grid.Row="2"
+                           Text="Password"
+                           FontSize="18"
+                           HorizontalTextAlignment="Start"
+                           VerticalTextAlignment="Center" />
+
+                    <Button Grid.Column="0"
+                            Grid.Row="3"
+                            Grid.ColumnSpan="2"
+                            Text="Edit Profile"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource KPrimary}, Dark={StaticResource KPrimary}}"
+                            TextColor="{AppThemeBinding Light={StaticResource KWhite}, Dark={StaticResource KWhite}}"
+                            FontAttributes="Bold"
+                            CornerRadius="15"
+                            MinimumHeightRequest="55"
+                            FontSize="18">
+                    </Button>
+                </Grid>
+
+                <Grid Margin="20,20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Row="0"
+                           Text="Payment Methods"
+                           FontSize="20"
+                           FontAttributes="Bold" />
+                    <CollectionView Grid.Row="1">
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <!-- payment methods template goes here-->
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </Grid>
+
+                <Grid Margin="20,20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Row="0"
+                           Text="App Settings"
+                           FontSize="20"
+                           FontAttributes="Bold" />
+                    <StackLayout Grid.Row="1"
+                                 Orientation="Vertical">
+                        <!-- settings controls go here-->
+                    </StackLayout>
+                </Grid>
             </StackLayout>
+
+            <Button Grid.Row="2"
+                    Text="Logout"
+                    Clicked="OnLogoutButtonClicked"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource KPrimary}, Dark={StaticResource KPrimary}}"
+                    TextColor="{AppThemeBinding Light={StaticResource KWhite}, Dark={StaticResource KWhite}}"
+                    FontAttributes="Bold"
+                    CornerRadius="15"
+                    MinimumHeightRequest="55"
+                    FontSize="18"
+                    Margin="20" />
         </Grid>
     </ContentPage.Content>
 </ContentPage>
