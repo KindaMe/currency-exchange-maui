@@ -9,6 +9,10 @@ public partial class ProfilePage : ContentPage
 
     private void OnLogoutButtonClicked(object sender, EventArgs e)
     {
-        if (Application.Current != null) Application.Current.MainPage = new NavigationPage(new LoginPage());
+        if (Application.Current != null)
+        {
+            Preferences.Remove(nameof(LoginPage.UserId));
+            Application.Current.MainPage = new NavigationPage(new LoginPage());
+        }
     }
 }

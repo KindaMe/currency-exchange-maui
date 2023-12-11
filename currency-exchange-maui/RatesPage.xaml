@@ -45,13 +45,16 @@
                                 <ColumnDefinition Width="auto" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
-                                <!-- <ColumnDefinition Width="auto" /> -->
                             </Grid.ColumnDefinitions>
 
                             <Grid.RowDefinitions>
                                 <RowDefinition />
                                 <RowDefinition />
                             </Grid.RowDefinitions>
+
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OpenDetails" />
+                            </Grid.GestureRecognizers>
 
                             <StackLayout Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Orientation="Vertical">
                                 <Frame CornerRadius="25"
@@ -100,8 +103,6 @@
 
                             <Label Grid.Column="2" Grid.Row="1"
                                    Text="ask" />
-
-                            <!-- <Button Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" Text="V" WidthRequest="75" /> -->
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

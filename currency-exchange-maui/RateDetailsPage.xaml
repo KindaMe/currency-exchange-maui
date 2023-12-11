@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:micro="clr-namespace:Microcharts.Maui;assembly=Microcharts.Maui"
+             x:Class="currency_exchange_maui.RateDetailsPage">
+    <ContentPage.Content>
+        <Grid Background="{AppThemeBinding Light={StaticResource KWhite}, Dark={StaticResource KSecondary}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0"
+                   Text="{Binding DetailedRate.code}"
+                   FontSize="38"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Start"
+                   TextTransform="Uppercase"
+                   Margin="20,20,20,0" />
+            <Label Grid.Row="1"
+                   Text="{Binding DetailedRate.currency}"
+                   FontSize="22"
+                   HorizontalOptions="Start"
+                   TextTransform="Default"
+                   Margin="20,0" />
+
+            <!-- <StackLayout Grid.Row="2" Orientation="Vertical"> -->
+            <!--     <CarouselView  ItemsSource="{Binding Charts}" IndicatorView="IndicatorView"> -->
+            <!--         <CarouselView.ItemTemplate> -->
+            <!--             <DataTemplate> -->
+            <!--                 <micro:ChartView Chart="{Binding .}" HeightRequest="200" WidthRequest="200" /> -->
+            <!--             </DataTemplate> -->
+            <!--         </CarouselView.ItemTemplate> -->
+            <!--     </CarouselView> -->
+            <!-- -->
+            <!--     <IndicatorView x:Name="IndicatorView" /> -->
+            <!-- </StackLayout> -->
+
+            <micro:ChartView Grid.Row="2"
+                             x:Name="RateChartView"
+                             HeightRequest="200"
+                             Margin="5,20" />
+
+            <Grid Grid.Row="3"
+                  ColumnSpacing="5"
+                  Margin="20,0">
+                <Grid.Resources>
+                    <Style TargetType="Button">
+                        <Setter Property="BackgroundColor"
+                                Value="{AppThemeBinding Light={StaticResource KPrimary}, Dark={StaticResource KPrimary}}" />
+                        <Setter Property="TextColor"
+                                Value="{AppThemeBinding Light={StaticResource KWhite}, Dark={StaticResource KWhite}}" />
+                        <Setter Property="FontAttributes" Value="Bold" />
+                        <Setter Property="CornerRadius" Value="15" />
+                        <Setter Property="MinimumHeightRequest" Value="30" />
+                        <Setter Property="FontSize" Value="12" />
+                    </Style>
+                </Grid.Resources>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="0" Text="1 Year" Clicked="Button_OnClicked365" />
+                <Button Grid.Column="1" Text="3 Months" Clicked="Button_OnClicked90" />
+                <Button Grid.Column="2" Text="1 Month" Clicked="Button_OnClicked30" />
+                <Button Grid.Column="3" Text="1 Week" Clicked="Button_OnClicked7" />
+            </Grid>
+
+            <Label Grid.Row="4"
+                   Text="Calculator"
+                   FontSize="30"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Start"
+                   Margin="20,40,20,20" />
+
+            <StackLayout Grid.Row="5"
+                         Orientation="Horizontal"
+                         Margin="20,0"
+                         VerticalOptions="Center">
+                <Entry x:Name="FirstCalcEntry"
+                       Placeholder="0.00"
+                       Keyboard="Numeric"
+                       FontSize="18"
+                       Completed="FirstCalcEntry_OnCompleted" />
+                <Label Text="PLN"
+                       VerticalOptions="Center"
+                       FontSize="18"
+                       FontAttributes="Bold" />
+                <Label x:Name="FirstEntryConvertRateLabel"
+                       VerticalOptions="Center"
+                       FontSize="14" />
+            </StackLayout>
+
+
+            <StackLayout Grid.Row="6"
+                         Orientation="Horizontal"
+                         Margin="20,0">
+                <Entry x:Name="SecondCalcEntry"
+                       Placeholder="0.00"
+                       Keyboard="Numeric"
+                       FontSize="18"
+                       Completed="SecondCalcEntry_OnCompleted" />
+                <Label Text="{Binding DetailedRate.code}"
+                       VerticalOptions="Center"
+                       FontSize="18"
+                       FontAttributes="Bold" />
+                <Label x:Name="SecondEntryConvertRateLabel"
+                       VerticalOptions="Center"
+                       FontSize="14" />
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

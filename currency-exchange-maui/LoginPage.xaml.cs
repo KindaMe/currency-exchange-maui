@@ -4,16 +4,11 @@ namespace currency_exchange_maui;
 
 public partial class LoginPage : ContentPage
 {
-    private int userId;
+    public static int UserId;
 
     public LoginPage()
     {
         InitializeComponent();
-
-        // if (Preferences.ContainsKey(nameof(userId)))
-        // {
-        //     Application.Current.MainPage = new AppShell();
-        // }
 
         NavigationPage.SetHasNavigationBar(this, false);
     }
@@ -26,12 +21,15 @@ public partial class LoginPage : ContentPage
         await testpog.TranslateTo(0, -2000, 1000, Easing.SpringIn);
 
         Indicator.IsRunning = true;
-        userId = await CurrencyExchangeAPI.AuthenticateUser(email, password);
+        UserId = await CurrencyExchangeAPI.AuthenticateUser(email, password);
 
-        if (userId != -1)
+        if (UserId != -1)
         {
-            Preferences.Set(nameof(userId), userId);
-            Application.Current.MainPage = new AppShell();
+            Preferences.Set(nameof(UserId), UserId);
+            if (Application.Current != null)
+            {
+                Application.Current.MainPage = new AppShell();
+            }
         }
         else
         {
@@ -48,5 +46,18 @@ public partial class LoginPage : ContentPage
     private void OnFirstEntryCompleted(object sender, EventArgs e)
     {
         PasswordEntry.Focus();
+    }
+
+    protected override void OnAppearing()
+    {
+        UserId = Preferences.Get(nameof(UserId), defaultValue: -1);
+
+        if (UserId != -1)
+        {
+            if (Application.Current != null)
+            {
+                Application.Current.MainPage = new AppShell();
+            }
+        }
     }
 }

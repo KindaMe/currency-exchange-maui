@@ -28,4 +28,18 @@ public static class CurrencyExchangeAPI
 
         return response.Data;
     }
+
+    public static async Task<ExchangeRateTableModel> GetCurrencyRates(string currency, DateTime startDate,
+        DateTime endDate)
+    {
+        var client = new RestClient(BaseUrl);
+        var request = new RestRequest("RatesTable");
+        request.AddParameter("currency", currency);
+        request.AddParameter("startDate", startDate.ToString("yyyy-MM-dd"));
+        request.AddParameter("endDate", endDate.ToString("yyyy-MM-dd"));
+
+        var response = await client.ExecuteGetAsync<ExchangeRateTableModel>(request);
+
+        return response.Data;
+    }
 }

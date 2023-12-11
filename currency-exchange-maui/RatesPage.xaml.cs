@@ -60,15 +60,23 @@ public partial class RatesPage : ContentPage
         {
             var ratesTable = await CurrencyExchangeAPI.GetCurrentRates();
 
-            if (ratesTable != null)
-            {
-                Rates = new ObservableCollection<Rate>(ratesTable[0].rates);
-                BindingContext = this;
-            }
+            if (ratesTable == null) return;
+
+            Rates = new ObservableCollection<Rate>(ratesTable[0].rates);
+
+            BindingContext = this;
         }
         finally
         {
             IsPageContentLoading = false;
+        }
+    }
+
+    private void OpenDetails(object sender, TappedEventArgs e)
+    {
+        if (sender is Grid { BindingContext: Rate rate })
+        {
+            Navigation.PushAsync(new RateDetailsPage(rate));
         }
     }
 }
