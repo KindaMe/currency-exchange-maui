@@ -65,9 +65,18 @@ public partial class RateDetailsPage : ContentPage
 
     private void RefreshChart()
     {
+        Color bgColor = Colors.Transparent;
+
+        if (Application.Current != null)
+        {
+            bgColor = Application.Current.RequestedTheme == AppTheme.Dark
+                ? Color.FromArgb("#171514")
+                : Color.FromArgb("#f0f0f0");
+        }
+
         var maxRate = _entries.MaxBy(r => r.Value).Value;
         var minRate = _entries.MinBy(r => r.Value).Value;
-    
+
         if (minRate != null && maxRate != null)
         {
             RateChartView.Chart = new LineChart()
@@ -79,7 +88,7 @@ public partial class RateDetailsPage : ContentPage
                 LineSize = 7,
                 PointMode = PointMode.Circle,
                 PointSize = 32,
-                BackgroundColor = SKColors.Transparent,
+                BackgroundColor = bgColor.ToSKColor(),
                 LabelTextSize = 36,
                 ValueLabelTextSize = 36,
                 IsAnimated = false
