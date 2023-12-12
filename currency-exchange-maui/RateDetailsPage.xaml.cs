@@ -33,6 +33,8 @@ public partial class RateDetailsPage : ContentPage
     {
         var pog = await CurrencyExchangeAPI.GetCurrencyRates(DetailedRate.code, startDate, DateTime.Now);
 
+        if (pog == null) return;
+
         Color textColor = Colors.Transparent;
 
         if (Application.Current != null)
@@ -95,7 +97,7 @@ public partial class RateDetailsPage : ContentPage
             };
         }
     }
-
+    
     private void Button_OnClicked365(object sender, EventArgs e)
     {
         RefreshEntries(DateTime.Now.AddDays(-365));

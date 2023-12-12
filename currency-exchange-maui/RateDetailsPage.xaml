@@ -30,18 +30,6 @@
                    TextTransform="Default"
                    Margin="20,0" />
 
-            <!-- <StackLayout Grid.Row="2" Orientation="Vertical"> -->
-            <!--     <CarouselView  ItemsSource="{Binding Charts}" IndicatorView="IndicatorView"> -->
-            <!--         <CarouselView.ItemTemplate> -->
-            <!--             <DataTemplate> -->
-            <!--                 <micro:ChartView Chart="{Binding .}" HeightRequest="200" WidthRequest="200" /> -->
-            <!--             </DataTemplate> -->
-            <!--         </CarouselView.ItemTemplate> -->
-            <!--     </CarouselView> -->
-            <!-- -->
-            <!--     <IndicatorView x:Name="IndicatorView" /> -->
-            <!-- </StackLayout> -->
-
             <micro:ChartView Grid.Row="2"
                              x:Name="RateChartView"
                              HeightRequest="200"
@@ -69,10 +57,10 @@
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
 
-                <Button Grid.Column="0" Text="1 Year" Clicked="Button_OnClicked365" />
-                <Button Grid.Column="1" Text="3 Months" Clicked="Button_OnClicked90" />
-                <Button Grid.Column="2" Text="1 Month" Clicked="Button_OnClicked30" />
-                <Button Grid.Column="3" Text="1 Week" Clicked="Button_OnClicked7" />
+                <Button Grid.Column="0" Text="1Y" Clicked="Button_OnClicked365" />
+                <Button Grid.Column="1" Text="3M" Clicked="Button_OnClicked90" />
+                <Button Grid.Column="2" Text="1M" Clicked="Button_OnClicked30" />
+                <Button Grid.Column="3" Text="1W" Clicked="Button_OnClicked7" />
             </Grid>
 
             <Label Grid.Row="4"
