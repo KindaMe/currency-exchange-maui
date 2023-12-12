@@ -19,7 +19,7 @@
                        Margin="0,5"
                        TextColor="{StaticResource KWhite}" />
 
-                <Label Text="PLN 4,505.46"
+                <Label Text="{Binding TotalBalance, StringFormat=PLN '{0:N2}'}"
                        FontSize="38"
                        FontAttributes="Bold"
                        Margin="0,5"
@@ -82,8 +82,13 @@
                            FontAttributes="Bold"
                            Padding="0,0,0,20" />
 
+                    <ActivityIndicator Grid.Row="1"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="Center"
+                                       IsRunning="{Binding IsPageContentLoading}" />
+
                     <CollectionView Grid.Row="1"
-                                    ItemsSource="{Binding TestContent}">
+                                    ItemsSource="{Binding Wallets}">
                         <CollectionView.ItemsLayout>
                             <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
                         </CollectionView.ItemsLayout>
@@ -115,18 +120,18 @@
                                     </Frame>
 
                                     <Label Grid.Column="1" Grid.Row="0"
-                                           Text="GBP"
+                                           Text="{Binding currency}"
                                            FontSize="18"
                                            FontAttributes="Bold"
                                            VerticalOptions="Center" />
 
                                     <Label Grid.Column="1" Grid.Row="1"
-                                           Text="PLN 1,156.99"
+                                           Text="{Binding ConvertedBalance, StringFormat=PLN '{0:N2}'}"
                                            TextColor="{AppThemeBinding Light={StaticResource KPrimary}, Dark={StaticResource KWhite}}"
                                            VerticalOptions="Center" />
 
                                     <Label Grid.Column="2" Grid.Row="0"
-                                           Text="1,420.22"
+                                           Text="{Binding balance, StringFormat='{0:N2}'}"
                                            FontSize="18"
                                            FontAttributes="Bold"
                                            VerticalOptions="Center"

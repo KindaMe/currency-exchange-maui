@@ -42,4 +42,15 @@ public static class CurrencyExchangeAPI
 
         return response.Data;
     }
+
+    public static async Task<List<WalletModel>> GetWallets(int userId)
+    {
+        var client = new RestClient(BaseUrl);
+        var request = new RestRequest("Wallets");
+        request.AddParameter("userId", userId);
+
+        var response = await client.ExecuteGetAsync<List<WalletModel>>(request);
+
+        return response.Data;
+    }
 }

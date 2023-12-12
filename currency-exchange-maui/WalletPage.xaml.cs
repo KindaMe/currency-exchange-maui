@@ -1,53 +1,97 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
+using api_access;
+using api_access.Models;
 
 namespace currency_exchange_maui;
 
 public partial class WalletPage : ContentPage
 {
-    public ObservableCollection<TestContentModel> TestContent { get; set; }
-    
+    private ObservableCollection<WalletModel> _wallets = new();
+
+    public ObservableCollection<WalletModel> Wallets
+    {
+        get => _wallets;
+        set
+        {
+            if (_wallets != value)
+            {
+                _wallets = value;
+                OnPropertyChanged(nameof(Wallets));
+            }
+        }
+    }
+
+    private bool _isPageContentLoading = true;
+
+    public bool IsPageContentLoading
+    {
+        get => _isPageContentLoading;
+        set
+        {
+            if (_isPageContentLoading != value)
+            {
+                _isPageContentLoading = value;
+                OnPropertyChanged(nameof(IsPageContentLoading));
+            }
+        }
+    }
+
+    private double _totalBalance;
+
+    public double TotalBalance
+    {
+        get => _totalBalance;
+        set
+        {
+            if (Math.Abs(_totalBalance - value) > 0.01)
+            {
+                _totalBalance = Math.Round(value,2);
+                OnPropertyChanged(nameof(TotalBalance));
+            }
+        }
+    }
+
     public WalletPage()
     {
         InitializeComponent();
-        
-        TestContent = new ObservableCollection<TestContentModel>();
-        
-        TestContent.Add(new TestContentModel("Test Wallet 1", 420.69, "USD"));
-        TestContent.Add(new TestContentModel("Test Wallet 2", 420.69, "GBP"));
-        TestContent.Add(new TestContentModel("Test Wallet 1", 420.69, "USD"));
-        TestContent.Add(new TestContentModel("Test Wallet 2", 420.69, "GBP"));
-        TestContent.Add(new TestContentModel("Test Wallet 1", 420.69, "USD"));
-        TestContent.Add(new TestContentModel("Test Wallet 2", 420.69, "GBP"));
-        TestContent.Add(new TestContentModel("Test Wallet 1", 420.69, "USD"));
-        TestContent.Add(new TestContentModel("Test Wallet 2", 420.69, "GBP"));
-        TestContent.Add(new TestContentModel("Test Wallet 1", 420.69, "USD"));
-        TestContent.Add(new TestContentModel("Test Wallet 2", 420.69, "GBP"));
-        TestContent.Add(new TestContentModel("Test Wallet 1", 420.69, "USD"));
-        TestContent.Add(new TestContentModel("Test Wallet 2", 420.69, "GBP"));
-        TestContent.Add(new TestContentModel("Test Wallet 1", 420.69, "USD"));
-        TestContent.Add(new TestContentModel("Test Wallet 2", 420.69, "GBP"));
-        TestContent.Add(new TestContentModel("Test Wallet 1", 420.69, "USD"));
-        TestContent.Add(new TestContentModel("Test Wallet 2", 420.69, "GBP"));
 
         BindingContext = this;
     }
-}
 
-public class TestContentModel
-{
-    public TestContentModel(string name, double balance, string currency)
+    protected override void OnAppearing()
     {
-        this.Name = name;
-        this.Balance = balance;
-        this.Currency = currency;
+        base.OnAppearing();
+
+        LoadPageContent();
     }
 
-    public string Name { get; set; }
-    public double Balance { get; set; }
-    public string Currency { get; set; }
+    private async void LoadPageContent()
+    {
+        Wallets.Clear();
+        TotalBalance = 0;
+
+        IsPageContentLoading = true;
+
+        try
+        {
+            var userId = Preferences.Get(nameof(LoginPage.UserId), defaultValue: -1);
+
+            var wallets = await CurrencyExchangeAPI.GetWallets(userId);
+
+            if (wallets == null) return;
+
+            Wallets = new ObservableCollection<WalletModel>(wallets);
+            
+            foreach (var wallet in Wallets)
+            {
+                TotalBalance += wallet.ConvertedBalance;
+            }
+            
+            BindingContext = this;
+        }
+        finally
+        {
+            IsPageContentLoading = false;
+        }
+    }
 }
