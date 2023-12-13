@@ -6,21 +6,6 @@ namespace currency_exchange_maui;
 
 public partial class WalletPage : ContentPage
 {
-    private ObservableCollection<WalletModel> _wallets = new();
-
-    public ObservableCollection<WalletModel> Wallets
-    {
-        get => _wallets;
-        set
-        {
-            if (_wallets != value)
-            {
-                _wallets = value;
-                OnPropertyChanged(nameof(Wallets));
-            }
-        }
-    }
-
     private bool _isPageContentLoading = true;
 
     public bool IsPageContentLoading
@@ -31,7 +16,22 @@ public partial class WalletPage : ContentPage
             if (_isPageContentLoading != value)
             {
                 _isPageContentLoading = value;
-                OnPropertyChanged(nameof(IsPageContentLoading));
+                OnPropertyChanged();
+            }
+        }
+    }
+
+    private ObservableCollection<WalletModel> _wallets = new();
+
+    public ObservableCollection<WalletModel> Wallets
+    {
+        get => _wallets;
+        set
+        {
+            if (_wallets != value)
+            {
+                _wallets = value;
+                OnPropertyChanged();
             }
         }
     }
@@ -45,11 +45,42 @@ public partial class WalletPage : ContentPage
         {
             if (Math.Abs(_totalBalance - value) > 0.01)
             {
-                _totalBalance = Math.Round(value,2);
-                OnPropertyChanged(nameof(TotalBalance));
+                _totalBalance = Math.Round(value, 2);
+                OnPropertyChanged();
             }
         }
     }
+
+    private double _totalGain;
+
+    public double TotalGain
+    {
+        get => _totalGain;
+        set
+        {
+            if (Math.Abs(_totalGain - value) > 0.01)
+            {
+                _totalGain = Math.Round(value, 2);
+                OnPropertyChanged();
+            }
+        }
+    }
+
+    private double _totalGainPercentage;
+
+    public double TotalGainPercentage
+    {
+        get => _totalGainPercentage;
+        set
+        {
+            if (Math.Abs(_totalGainPercentage - value) > 0.01)
+            {
+                _totalGainPercentage = Math.Round(value, 2);
+                OnPropertyChanged();
+            }
+        }
+    }
+
 
     public WalletPage()
     {
@@ -69,6 +100,8 @@ public partial class WalletPage : ContentPage
     {
         Wallets.Clear();
         TotalBalance = 0;
+        TotalGain = 0;
+        TotalGainPercentage = 0;
 
         IsPageContentLoading = true;
 
@@ -80,14 +113,44 @@ public partial class WalletPage : ContentPage
 
             if (wallets == null) return;
 
-            Wallets = new ObservableCollection<WalletModel>(wallets);
-            
-            foreach (var wallet in Wallets)
+            double portfolioTotalValue = 0;
+            double portfolioInitialTotalValue = 0;
+            double portfolioGain = 0;
+
+            foreach (var wallet in wallets)
             {
-                TotalBalance += wallet.ConvertedBalance;
+                var rate = await CurrencyExchangeAPI.GetCurrentCurrencyRate(wallet.currency);
+                wallet.CurrentRate = rate.rates[0].mid;
+
+                double walletInitialTotalValue = 0;
+
+                foreach (var transaction in wallet.Transactions)
+                {
+                    var transactionOldRate =
+                        await CurrencyExchangeAPI.GetCurrencyRates(wallet.currency, transaction.date.AddDays(-7),
+                            transaction.date);
+
+                    walletInitialTotalValue += (double)transaction.amount_in * transactionOldRate.rates[^1].mid;
+                }
+
+                var walletGain = wallet.ConvertedBalance - walletInitialTotalValue;
+
+                portfolioGain += walletGain;
+                portfolioTotalValue += wallet.ConvertedBalance;
+                portfolioInitialTotalValue += walletInitialTotalValue;
+
+                wallet.GainPercentage = (walletGain / walletInitialTotalValue) * 100.0d;
             }
-            
-            BindingContext = this;
+
+            Wallets = new ObservableCollection<WalletModel>(wallets);
+
+
+            TotalBalance = portfolioTotalValue;
+
+            TotalGain = portfolioGain;
+
+            TotalGainPercentage = ((portfolioTotalValue - portfolioInitialTotalValue) / portfolioInitialTotalValue) *
+                                  100.0d;
         }
         finally
         {

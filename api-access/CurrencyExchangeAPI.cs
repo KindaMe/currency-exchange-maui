@@ -47,9 +47,20 @@ public static class CurrencyExchangeAPI
     {
         var client = new RestClient(BaseUrl);
         var request = new RestRequest("Wallets");
-        request.AddParameter("userId", userId);
+        request.AddParameter("userId1", userId);
 
         var response = await client.ExecuteGetAsync<List<WalletModel>>(request);
+
+        return response.Data;
+    }
+
+    public static async Task<ExchangeRateTableModel> GetCurrentCurrencyRate(string currency)
+    {
+        var client = new RestClient(BaseUrl);
+        var request = new RestRequest("RatesTable");
+        request.AddParameter("currency", currency);
+
+        var response = await client.ExecuteGetAsync<ExchangeRateTableModel>(request);
 
         return response.Data;
     }

@@ -2,9 +2,14 @@
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:currency_exchange_maui.Converters"
              x:Class="currency_exchange_maui.WalletPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:SignConverter x:Key="SignConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
-
         <Grid BackgroundColor="{StaticResource KSecondary}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
@@ -27,12 +32,30 @@
 
                 <StackLayout Orientation="Horizontal"
                              Margin="0,5">
-                    <Label Text="+ PLN 362.45   "
+                    <Label Text="{Binding TotalGain, StringFormat='{}{0:PLN 0.00; - PLN 0.00}'}"
                            TextColor="{StaticResource KWhite}"
                            FontSize="18" />
-                    <Label Text="6.25%"
-                           TextColor="{StaticResource KPositive}"
-                           FontSize="18" />
+                    <Label Text="{Binding TotalGainPercentage,StringFormat='{0:F2}%'}"
+                           FontSize="18"
+                           Margin="10,0,0,0">
+                        <Label.Triggers>
+                            <DataTrigger TargetType="Label"
+                                         Binding="{Binding TotalGainPercentage, 
+                                         Converter={StaticResource SignConverter}}"
+                                         Value="Positive">
+                                <Setter Property="TextColor" Value="{StaticResource KPositive}" />
+                            </DataTrigger>
+                            <!-- <DataTrigger TargetType="Label" Binding="{Binding GainPercentage, Converter={StaticResource SignConverter}}" Value="Zero"> -->
+                            <!--     <Setter Property="TextColor" Value="{StaticResource KWhite}" /> -->
+                            <!-- </DataTrigger> -->
+                            <DataTrigger TargetType="Label"
+                                         Binding="{Binding TotalGainPercentage, 
+                                         Converter={StaticResource SignConverter}}"
+                                         Value="Negative">
+                                <Setter Property="TextColor" Value="{StaticResource KNegative}" />
+                            </DataTrigger>
+                        </Label.Triggers>
+                    </Label>
                 </StackLayout>
 
                 <Grid HorizontalOptions="Fill"
@@ -138,10 +161,27 @@
                                            HorizontalTextAlignment="End" />
 
                                     <Label Grid.Column="2" Grid.Row="1"
-                                           Text="1.16%"
-                                           TextColor="{StaticResource KPositive}"
+                                           Text="{Binding GainPercentage,StringFormat='{0:F2}%'}"
                                            VerticalOptions="Center"
-                                           HorizontalTextAlignment="End" />
+                                           HorizontalTextAlignment="End">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label"
+                                                         Binding="{Binding GainPercentage, 
+                                                         Converter={StaticResource SignConverter}}"
+                                                         Value="Positive">
+                                                <Setter Property="TextColor" Value="{StaticResource KPositive}" />
+                                            </DataTrigger>
+                                            <!-- <DataTrigger TargetType="Label" Binding="{Binding GainPercentage, Converter={StaticResource SignConverter}}" Value="Zero"> -->
+                                            <!--     <Setter Property="TextColor" Value="{StaticResource KWhite}" /> -->
+                                            <!-- </DataTrigger> -->
+                                            <DataTrigger TargetType="Label"
+                                                         Binding="{Binding GainPercentage, 
+                                                         Converter={StaticResource SignConverter}}"
+                                                         Value="Negative">
+                                                <Setter Property="TextColor" Value="{StaticResource KNegative}" />
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
                                 </Grid>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
