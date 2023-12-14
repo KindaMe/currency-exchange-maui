@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="currency_exchange_maui.WalletDetailsPage">
+    <ContentPage.Content>
+        <Grid Background="{AppThemeBinding Light={StaticResource KWhite}, Dark={StaticResource KSecondary}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0"
+                   Text="History"
+                   FontSize="38"
+                   FontAttributes="Bold"
+                   Margin="20"
+                   TextColor="{AppThemeBinding Light={StaticResource KSecondary}, Dark={StaticResource KWhite}}" />
+
+            <!-- <ActivityIndicator Grid.Row="1" -->
+            <!--                    VerticalOptions="Center" -->
+            <!--                    HorizontalOptions="Center" -->
+            <!--                    IsRunning="{Binding IsPageContentLoading}" /> -->
+
+            <CollectionView Grid.Row="1"
+                            ItemsSource="{Binding DetailedWallet.Transactions}"
+                            Margin="20,0">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical"
+                                       ItemSpacing="10" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.Resources>
+                                <Style TargetType="{x:Type Label}">
+                                    <Setter Property="HorizontalTextAlignment" Value="Center" />
+                                    <Setter Property="HorizontalOptions" Value="Fill" />
+                                    <Setter Property="TextColor"
+                                            Value="{AppThemeBinding Light={StaticResource KSecondary}, Dark={StaticResource KWhite}}" />
+                                </Style>
+                            </Grid.Resources>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            
+                            <Label Grid.Column="0"
+                                   Text="{Binding date,StringFormat='{0:dd-MM-yyyy}'}"
+                                   FontSize="20" />
+
+                            <Label Grid.Column="1"
+                                   Text="{Binding amount_in}"
+                                   FontSize="20"
+                                   FontAttributes="Bold" />
+                            
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

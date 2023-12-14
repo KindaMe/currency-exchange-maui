@@ -157,4 +157,12 @@ public partial class WalletPage : ContentPage
             IsPageContentLoading = false;
         }
     }
+
+    private void OpenDetails(object sender, TappedEventArgs e)
+    {
+        if (sender is Grid { BindingContext: WalletModel wallet })
+        {
+            Navigation.PushAsync(new WalletDetailsPage(wallet));
+        }
+    }
 }
