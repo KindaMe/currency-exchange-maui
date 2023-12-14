@@ -165,4 +165,14 @@ public partial class WalletPage : ContentPage
             Navigation.PushAsync(new WalletDetailsPage(wallet));
         }
     }
+
+    private void BuyButton_OnClicked(object sender, EventArgs e)
+    {
+        Navigation.PushAsync(new BuyPage());
+    }
+
+    private void WithdrawButton_OnClicked(object sender, EventArgs e)
+    {
+        Navigation.PushAsync(new WithdrawPage());
+    }
 }

@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="currency_exchange_maui.WithdrawPage">
+    <ContentPage.Content>
+        <Grid Background="{AppThemeBinding Light={StaticResource KWhite}, Dark={StaticResource KSecondary}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0"
+                   Text="Withdraw"
+                   FontSize="38"
+                   FontAttributes="Bold"
+                   Margin="20"
+                   TextColor="{AppThemeBinding Light={StaticResource KSecondary}, Dark={StaticResource KWhite}}" />
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

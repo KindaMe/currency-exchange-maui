@@ -78,10 +78,14 @@
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
 
-                    <Button Grid.Column="0"
-                            Text="Buy" />
-                    <Button Grid.Column="1"
-                            Text="Withdraw" />
+                    <Button x:Name="BuyButton" 
+                            Grid.Column="0"
+                            Text="Buy" 
+                            Clicked="BuyButton_OnClicked"/>
+                    <Button x:Name="WithdrawButton" 
+                            Grid.Column="1"
+                            Text="Withdraw" 
+                            Clicked="WithdrawButton_OnClicked"/>
                 </Grid>
             </StackLayout>
 
