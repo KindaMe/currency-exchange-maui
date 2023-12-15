@@ -13,19 +13,19 @@
         
         <ShellContent
             Title="Wallet"
-            Icon="dotnet_bot.png"
+            Icon="wallet_100.png"
             ContentTemplate="{DataTemplate local:WalletPage}"
             Route="WalletPage" />
 
         <ShellContent
             Title="Rates"
-            Icon="dotnet_bot.png"
+            Icon="currency_exchange_100.png"
             ContentTemplate="{DataTemplate local:RatesPage}"
             Route="RatesPage" />
 
         <ShellContent
             Title="Profile"
-            Icon="dotnet_bot.png"
+            Icon="profile_100.png"
             ContentTemplate="{DataTemplate local:ProfilePage}"
             Route="ProfilePage" />
     </TabBar>

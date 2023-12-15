@@ -119,27 +119,41 @@ public partial class WalletPage : ContentPage
 
             foreach (var wallet in wallets)
             {
-                var rate = await CurrencyExchangeAPI.GetCurrentCurrencyRate(wallet.currency);
-                wallet.CurrentRate = rate.rates[0].mid;
-
                 double walletInitialTotalValue = 0;
 
-                foreach (var transaction in wallet.Transactions)
+                if (wallet.currency != "PLN")
                 {
-                    var transactionOldRate =
-                        await CurrencyExchangeAPI.GetCurrencyRates(wallet.currency, transaction.date.AddDays(-7),
-                            transaction.date);
+                    var rate = await CurrencyExchangeAPI.GetCurrentCurrencyRate(wallet.currency);
+                    wallet.CurrentRate = rate.rates[0].mid;
+                    
+                    foreach (var transaction in wallet.Transactions)
+                    {
+                        var transactionOldRate =
+                            await CurrencyExchangeAPI.GetCurrencyRates(wallet.currency, transaction.date.AddDays(-7),
+                                transaction.date);
 
-                    walletInitialTotalValue += (double)transaction.amount_in * transactionOldRate.rates[^1].mid;
+                        walletInitialTotalValue += (double)transaction.amount_in * transactionOldRate.rates[^1].mid;
+                    }
+
+                    var walletGain = wallet.ConvertedBalance - walletInitialTotalValue;
+
+                    portfolioGain += walletGain;
+
+                    wallet.GainPercentage = (walletGain / walletInitialTotalValue) * 100.0d;
+                }
+                else
+                {
+                    wallet.CurrentRate = 1;
+
+                    foreach (var transaction in wallet.Transactions)
+                    {
+                        walletInitialTotalValue += (double)transaction.amount_in;
+                    }
+                    
                 }
 
-                var walletGain = wallet.ConvertedBalance - walletInitialTotalValue;
-
-                portfolioGain += walletGain;
-                portfolioTotalValue += wallet.ConvertedBalance;
                 portfolioInitialTotalValue += walletInitialTotalValue;
-
-                wallet.GainPercentage = (walletGain / walletInitialTotalValue) * 100.0d;
+                portfolioTotalValue += wallet.ConvertedBalance;
             }
 
             Wallets = new ObservableCollection<WalletModel>(wallets);
@@ -150,7 +164,7 @@ public partial class WalletPage : ContentPage
             TotalGain = portfolioGain;
 
             TotalGainPercentage = ((portfolioTotalValue - portfolioInitialTotalValue) / portfolioInitialTotalValue) *
-                                  100.0d;
+                                  100;
         }
         finally
         {

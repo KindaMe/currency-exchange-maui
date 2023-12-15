@@ -40,7 +40,7 @@ public partial class LoginPage : ContentPage
 
     private void OnRegisterButtonClicked(object sender, EventArgs e)
     {
-        //ph
+        Navigation.PushAsync(new RegisterPage());
     }
 
     private void OnFirstEntryCompleted(object sender, EventArgs e)

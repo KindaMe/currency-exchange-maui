@@ -64,4 +64,13 @@ public static class CurrencyExchangeAPI
 
         return response.Data;
     }
+
+    public static async void PostUser(UserModel user)
+    {
+        var client = new RestClient(BaseUrl);
+        var request = new RestRequest("Users");
+        request.AddBody(user);
+
+        await client.ExecutePostAsync(request);
+    }
 }
