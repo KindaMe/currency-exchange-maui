@@ -1,4 +1,6 @@
-﻿namespace currency_exchange_maui;
+﻿using api_access;
+
+namespace currency_exchange_maui;
 
 public partial class ProfilePage : ContentPage
 {
@@ -11,7 +13,7 @@ public partial class ProfilePage : ContentPage
     {
         if (Application.Current != null)
         {
-            Preferences.Remove(nameof(LoginPage.UserId));
+            Preferences.Remove(nameof(CurrencyExchangeAPI.AuthToken));
             Application.Current.MainPage = new NavigationPage(new LoginPage());
         }
     }

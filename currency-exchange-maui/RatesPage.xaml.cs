@@ -62,7 +62,7 @@ public partial class RatesPage : ContentPage
 
             if (ratesTable == null) return;
 
-            Rates = new ObservableCollection<Rate>(ratesTable[0].rates);
+            Rates = new ObservableCollection<Rate>(ratesTable.rates);
 
             BindingContext = this;
         }

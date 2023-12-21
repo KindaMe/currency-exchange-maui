@@ -4,8 +4,6 @@ namespace currency_exchange_maui;
 
 public partial class LoginPage : ContentPage
 {
-    public static int UserId;
-
     public LoginPage()
     {
         InitializeComponent();
@@ -21,11 +19,11 @@ public partial class LoginPage : ContentPage
         await testpog.TranslateTo(0, -2000, 1000, Easing.SpringIn);
 
         Indicator.IsRunning = true;
-        UserId = await CurrencyExchangeAPI.AuthenticateUser(email, password);
+        var authToken = await CurrencyExchangeAPI.GenerateToken(email, password);
 
-        if (UserId != -1)
+        if (authToken != null)
         {
-            Preferences.Set(nameof(UserId), UserId);
+            Preferences.Set(nameof(CurrencyExchangeAPI.AuthToken), authToken);
             if (Application.Current != null)
             {
                 Application.Current.MainPage = new AppShell();
@@ -50,9 +48,7 @@ public partial class LoginPage : ContentPage
 
     protected override void OnAppearing()
     {
-        UserId = Preferences.Get(nameof(UserId), defaultValue: -1);
-
-        if (UserId != -1)
+        if (CurrencyExchangeAPI.AuthToken != null)
         {
             if (Application.Current != null)
             {

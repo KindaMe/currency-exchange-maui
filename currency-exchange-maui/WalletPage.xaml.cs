@@ -107,9 +107,7 @@ public partial class WalletPage : ContentPage
 
         try
         {
-            var userId = Preferences.Get(nameof(LoginPage.UserId), defaultValue: -1);
-
-            var wallets = await CurrencyExchangeAPI.GetWallets(userId);
+            var wallets = await CurrencyExchangeAPI.GetWallets();
 
             if (wallets == null) return;
 
@@ -121,18 +119,18 @@ public partial class WalletPage : ContentPage
             {
                 double walletInitialTotalValue = 0;
 
-                if (wallet.currency != "PLN")
+                if (wallet.Currency != "PLN")
                 {
-                    var rate = await CurrencyExchangeAPI.GetCurrentCurrencyRate(wallet.currency);
+                    var rate = await CurrencyExchangeAPI.GetCurrentCurrencyRate(wallet.Currency);
                     wallet.CurrentRate = rate.rates[0].mid;
-                    
+
                     foreach (var transaction in wallet.Transactions)
                     {
                         var transactionOldRate =
-                            await CurrencyExchangeAPI.GetCurrencyRates(wallet.currency, transaction.date.AddDays(-7),
-                                transaction.date);
+                            await CurrencyExchangeAPI.GetCurrencyRates(wallet.Currency, transaction.Date.AddDays(-7),
+                                transaction.Date);
 
-                        walletInitialTotalValue += (double)transaction.amount_in * transactionOldRate.rates[^1].mid;
+                        walletInitialTotalValue += (double)transaction.AmountIn * transactionOldRate.rates[^1].mid;
                     }
 
                     var walletGain = wallet.ConvertedBalance - walletInitialTotalValue;
@@ -147,9 +145,8 @@ public partial class WalletPage : ContentPage
 
                     foreach (var transaction in wallet.Transactions)
                     {
-                        walletInitialTotalValue += (double)transaction.amount_in;
+                        walletInitialTotalValue += (double)transaction.AmountIn;
                     }
-                    
                 }
 
                 portfolioInitialTotalValue += walletInitialTotalValue;

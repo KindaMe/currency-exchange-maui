@@ -42,19 +42,19 @@
                 <Entry x:Name="FNameEntry"
                        Grid.Row="0"
                        Placeholder="First Name"
-                       Text="{Binding NewUser.first_name,Mode=TwoWay}" />
+                       Text="{Binding NewUser.FirstName,Mode=TwoWay}" />
                 <Entry x:Name="LNameEntry"
                        Grid.Row="1"
                        Placeholder="Last Name"
-                       Text="{Binding NewUser.last_name,Mode=TwoWay}" />
+                       Text="{Binding NewUser.LastName,Mode=TwoWay}" />
                 <Entry x:Name="EmailEntry"
                        Grid.Row="2"
                        Placeholder="Email"
-                       Text="{Binding NewUser.email,Mode=TwoWay}" />
+                       Text="{Binding NewUser.Email,Mode=TwoWay}" />
                 <Entry x:Name="PasswordEntry"
                        Grid.Row="3"
                        Placeholder="Password"
-                       Text="{Binding NewUser.password,Mode=TwoWay}" />
+                       Text="{Binding NewUser.Password,Mode=TwoWay}" />
             </Grid>
 
             <Button Grid.Row="2"

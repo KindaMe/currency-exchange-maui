@@ -2,9 +2,9 @@
 
 public class TransactionModel
 {
-    public int id { get; set; }
-    public DateTime date { get; set; }
-    public int wallet_id { get; set; }
-    public string currency_in { get; set; }
-    public decimal amount_in { get; set; }
+    public int Id { get; set; }
+    public DateTime Date { get; set; }
+    public int WalletId { get; set; }
+    public string CurrencyIn { get; set; }
+    public decimal AmountIn { get; set; }
 }

@@ -150,7 +150,7 @@
                                     </Frame>
 
                                     <Label Grid.Column="1" Grid.Row="0"
-                                           Text="{Binding currency}"
+                                           Text="{Binding Currency}"
                                            FontSize="18"
                                            FontAttributes="Bold"
                                            VerticalOptions="Center" />
@@ -161,7 +161,7 @@
                                            VerticalOptions="Center" />
 
                                     <Label Grid.Column="2" Grid.Row="0"
-                                           Text="{Binding balance, StringFormat='{0:N2}'}"
+                                           Text="{Binding Balance, StringFormat='{0:N2}'}"
                                            FontSize="18"
                                            FontAttributes="Bold"
                                            VerticalOptions="Center"

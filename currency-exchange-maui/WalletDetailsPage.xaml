@@ -47,11 +47,11 @@
                             </Grid.ColumnDefinitions>
                             
                             <Label Grid.Column="0"
-                                   Text="{Binding date,StringFormat='{0:dd-MM-yyyy}'}"
+                                   Text="{Binding Date,StringFormat='{0:dd-MM-yyyy}'}"
                                    FontSize="20" />
 
                             <Label Grid.Column="1"
-                                   Text="{Binding amount_in}"
+                                   Text="{Binding AmountIn}"
                                    FontSize="20"
                                    FontAttributes="Bold" />
                             
