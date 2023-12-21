@@ -1,4 +1,5 @@
 ﻿using api_access;
+using api_access.Models;
 
 namespace currency_exchange_maui;
 
@@ -13,13 +14,16 @@ public partial class LoginPage : ContentPage
 
     private async void OnLoginButtonClicked(object sender, EventArgs e)
     {
-        string email = EmailEntry.Text;
-        string password = PasswordEntry.Text;
+        var  userCredentials = new UserCredentialsModel
+        {
+            Email = EmailEntry.Text,
+            Password = PasswordEntry.Text
+        };
 
         await testpog.TranslateTo(0, -2000, 1000, Easing.SpringIn);
 
         Indicator.IsRunning = true;
-        var authToken = await CurrencyExchangeAPI.GenerateToken(email, password);
+        var authToken = await CurrencyExchangeAPI.RequestToken(userCredentials);
 
         if (authToken != null)
         {

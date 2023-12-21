@@ -10,16 +10,10 @@ public static class CurrencyExchangeAPI
 
     public static string AuthToken => Preferences.Get(nameof(AuthToken), defaultValue: null);
 
-    public static async Task<string> GenerateToken(string email, string password)
+    public static async Task<string> RequestToken(UserCredentialsModel userCredentials)
     {
         var client = new RestClient(BaseUrl);
         var request = new RestRequest("Token");
-
-        var userCredentials = new UserCredentialsModel
-        {
-            Email = email,
-            Password = password
-        };
 
         request.AddJsonBody(userCredentials);
 
