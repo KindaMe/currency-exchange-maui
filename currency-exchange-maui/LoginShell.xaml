@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="currency_exchange_maui.LoginShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:currency_exchange_maui"
+    Shell.FlyoutBehavior="Disabled"
+    Shell.NavBarIsVisible="False" 
+    Shell.TabBarTitleColor="{StaticResource KPrimary}"
+    Shell.TabBarBackgroundColor="{AppThemeBinding Light={StaticResource KWhite}, Dark={StaticResource KSecondary}}">
+    
+    <TabBar>
+        
+        <ShellContent
+            Title="Login"
+            Icon="login_50.png"
+            ContentTemplate="{DataTemplate local:LoginPage}"
+            Route="LoginPage" />
+
+        <ShellContent
+            Title="Rates"
+            Icon="currency_exchange_100.png"
+            ContentTemplate="{DataTemplate local:RatesPage}"
+            Route="RatesPage" />
+    </TabBar>
+
+</Shell>

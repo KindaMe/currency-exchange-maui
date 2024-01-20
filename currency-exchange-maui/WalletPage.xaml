@@ -2,12 +2,11 @@
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:converters="clr-namespace:currency_exchange_maui.Converters"
              x:Class="currency_exchange_maui.WalletPage">
     <ContentPage.Resources>
-        <ResourceDictionary>
-            <converters:SignConverter x:Key="SignConverter" />
-        </ResourceDictionary>
+        <converters:InvertBooleanConverter x:Key="InvertBooleanConverter" />
     </ContentPage.Resources>
     <ContentPage.Content>
         <Grid BackgroundColor="{StaticResource KSecondary}">
@@ -24,42 +23,14 @@
                        Margin="0,5"
                        TextColor="{StaticResource KWhite}" />
 
-                <Label Text="{Binding TotalBalance, StringFormat=PLN '{0:N2}'}"
+                <Label Text="{Binding TotalBalanceInLocalCurrency, StringFormat=PLN '{0:N2}'}"
                        FontSize="38"
                        FontAttributes="Bold"
                        Margin="0,5"
                        TextColor="{StaticResource KWhite}" />
 
-                <StackLayout Orientation="Horizontal"
-                             Margin="0,5">
-                    <Label Text="{Binding TotalGain, StringFormat='{}{0:PLN 0.00; - PLN 0.00}'}"
-                           TextColor="{StaticResource KWhite}"
-                           FontSize="18" />
-                    <Label Text="{Binding TotalGainPercentage,StringFormat='{0:F2}%'}"
-                           FontSize="18"
-                           Margin="10,0,0,0">
-                        <Label.Triggers>
-                            <DataTrigger TargetType="Label"
-                                         Binding="{Binding TotalGainPercentage, 
-                                         Converter={StaticResource SignConverter}}"
-                                         Value="Positive">
-                                <Setter Property="TextColor" Value="{StaticResource KPositive}" />
-                            </DataTrigger>
-                            <!-- <DataTrigger TargetType="Label" Binding="{Binding GainPercentage, Converter={StaticResource SignConverter}}" Value="Zero"> -->
-                            <!--     <Setter Property="TextColor" Value="{StaticResource KWhite}" /> -->
-                            <!-- </DataTrigger> -->
-                            <DataTrigger TargetType="Label"
-                                         Binding="{Binding TotalGainPercentage, 
-                                         Converter={StaticResource SignConverter}}"
-                                         Value="Negative">
-                                <Setter Property="TextColor" Value="{StaticResource KNegative}" />
-                            </DataTrigger>
-                        </Label.Triggers>
-                    </Label>
-                </StackLayout>
-
                 <Grid HorizontalOptions="Fill"
-                      Margin="0,30,0,10"
+                      Margin="0,15,0,10"
                       ColumnSpacing="20">
                     <Grid.Resources>
                         <Style TargetType="Button">
@@ -78,14 +49,16 @@
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
 
-                    <Button x:Name="BuyButton" 
+                    <Button x:Name="BuyButton"
                             Grid.Column="0"
-                            Text="Buy" 
-                            Clicked="BuyButton_OnClicked"/>
-                    <Button x:Name="WithdrawButton" 
+                            Text="Buy"
+                            Clicked="BuyButton_OnClicked"
+                            IsEnabled="{Binding IsButtonProcessing, Converter={StaticResource InvertBooleanConverter}}"/>
+                    <Button x:Name="WithdrawButton"
                             Grid.Column="1"
-                            Text="Withdraw" 
-                            Clicked="WithdrawButton_OnClicked"/>
+                            Text="Withdraw"
+                            Clicked="WithdrawButton_OnClicked"
+                            IsEnabled="{Binding IsButtonProcessing, Converter={StaticResource InvertBooleanConverter}}"/>
                 </Grid>
             </StackLayout>
 
@@ -103,96 +76,97 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <Label Grid.Row="0"
-                           Text="My Portfolios"
-                           FontSize="20"
-                           FontAttributes="Bold"
-                           Padding="0,0,0,20" />
+                    <Grid Grid.Row="0" HorizontalOptions="Fill" Padding="0,0,0,20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
 
-                    <ActivityIndicator Grid.Row="1"
-                                       VerticalOptions="Center"
-                                       HorizontalOptions="Center"
-                                       IsRunning="{Binding IsPageContentLoading}" />
+                        <Label Grid.Column="0" Text="My Portfolios"
+                               FontSize="20"
+                               FontAttributes="Bold" />
+                        
+                        <ImageButton Grid.Column="1"
+                                     Source="plus_100.png"
+                                     CornerRadius="15"
+                                     WidthRequest="30"
+                                     HeightRequest="30"
+                                     Aspect="AspectFit"
+                                     VerticalOptions="Center"
+                                     Clicked="ImageButton_OnClicked"
+                                     IsEnabled="{Binding IsButtonProcessing, Converter={StaticResource InvertBooleanConverter}}">
+                            <Image.Behaviors>
+                                <toolkit:IconTintColorBehavior
+                                    TintColor="{AppThemeBinding Light={StaticResource KSecondary}, Dark={StaticResource KWhite}}" />
+                            </Image.Behaviors>
+                        </ImageButton>
 
-                    <CollectionView Grid.Row="1"
-                                    ItemsSource="{Binding Wallets}">
-                        <CollectionView.ItemsLayout>
-                            <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
-                        </CollectionView.ItemsLayout>
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
+                    </Grid>
 
-                                <Grid Margin="3,0,3,3">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="auto" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="auto" />
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition />
-                                        <RowDefinition />
-                                    </Grid.RowDefinitions>
-                                    <Grid.GestureRecognizers>
-                                        <TapGestureRecognizer Tapped="OpenDetails" />
-                                    </Grid.GestureRecognizers>
 
-                                    <Frame Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"
-                                           CornerRadius="25"
-                                           Margin="0,0,10,0"
-                                           WidthRequest="50"
-                                           HeightRequest="50">
+                    <RefreshView Grid.Row="1"
+                                 IsRefreshing="{Binding IsPageContentLoading}"
+                                 Command="{Binding RefreshCommand}">
+                        <CollectionView
+                            ItemsSource="{Binding Wallets}">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
 
-                                        <Image Source="flag_20x30.jpg"
-                                               VerticalOptions="Fill"
-                                               Margin="0"
-                                               WidthRequest="80"
-                                               HeightRequest="80" />
-                                    </Frame>
+                                    <Grid Margin="3,0,3,3">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OpenDetails" />
+                                        </Grid.GestureRecognizers>
 
-                                    <Label Grid.Column="1" Grid.Row="0"
-                                           Text="{Binding Currency}"
-                                           FontSize="18"
-                                           FontAttributes="Bold"
-                                           VerticalOptions="Center" />
+                                        <Frame Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"
+                                               CornerRadius="25"
+                                               Margin="0,0,10,0"
+                                               WidthRequest="50"
+                                               HeightRequest="50"
+                                               HasShadow="True">
 
-                                    <Label Grid.Column="1" Grid.Row="1"
-                                           Text="{Binding ConvertedBalance, StringFormat=PLN '{0:N2}'}"
-                                           TextColor="{AppThemeBinding Light={StaticResource KPrimary}, Dark={StaticResource KWhite}}"
-                                           VerticalOptions="Center" />
+                                            <Image Source="{Binding FlagUrl}"
+                                                   Margin="0"
+                                                   WidthRequest="50"
+                                                   HeightRequest="50"
+                                                   Aspect="AspectFill" />
+                                        </Frame>
 
-                                    <Label Grid.Column="2" Grid.Row="0"
-                                           Text="{Binding Balance, StringFormat='{0:N2}'}"
-                                           FontSize="18"
-                                           FontAttributes="Bold"
-                                           VerticalOptions="Center"
-                                           HorizontalTextAlignment="End" />
+                                        <Label Grid.Column="1" Grid.Row="0" Grid.RowSpan="2"
+                                               Text="{Binding Currency}"
+                                               FontSize="22"
+                                               FontAttributes="Bold"
+                                               VerticalOptions="Center" />
 
-                                    <Label Grid.Column="2" Grid.Row="1"
-                                           Text="{Binding GainPercentage,StringFormat='{0:F2}%'}"
-                                           VerticalOptions="Center"
-                                           HorizontalTextAlignment="End">
-                                        <Label.Triggers>
-                                            <DataTrigger TargetType="Label"
-                                                         Binding="{Binding GainPercentage, 
-                                                         Converter={StaticResource SignConverter}}"
-                                                         Value="Positive">
-                                                <Setter Property="TextColor" Value="{StaticResource KPositive}" />
-                                            </DataTrigger>
-                                            <!-- <DataTrigger TargetType="Label" Binding="{Binding GainPercentage, Converter={StaticResource SignConverter}}" Value="Zero"> -->
-                                            <!--     <Setter Property="TextColor" Value="{StaticResource KWhite}" /> -->
-                                            <!-- </DataTrigger> -->
-                                            <DataTrigger TargetType="Label"
-                                                         Binding="{Binding GainPercentage, 
-                                                         Converter={StaticResource SignConverter}}"
-                                                         Value="Negative">
-                                                <Setter Property="TextColor" Value="{StaticResource KNegative}" />
-                                            </DataTrigger>
-                                        </Label.Triggers>
-                                    </Label>
-                                </Grid>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
+                                        <Label Grid.Column="2" Grid.Row="1"
+                                               Text="{Binding CurrentBalanceInLocalCurrency, StringFormat=PLN '{0:N2}'}"
+                                               TextColor="{AppThemeBinding Light={StaticResource KPrimary}, Dark={StaticResource KWhite}}"
+                                               VerticalOptions="Center"
+                                               HorizontalTextAlignment="End" />
+
+                                        <Label Grid.Column="2" Grid.Row="0"
+                                               Text="{Binding CurrentBalance, StringFormat='{0:N2}'}"
+                                               FontSize="18"
+                                               FontAttributes="Bold"
+                                               VerticalOptions="Center"
+                                               HorizontalTextAlignment="End" />
+
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </RefreshView>
                 </Grid>
             </Border>
         </Grid>

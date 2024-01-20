@@ -8,6 +8,7 @@ public class ExchangeRateTableModel
     public string no { get; set; }
     public string effectiveDate { get; set; }
     public List<Rate> rates { get; set; }
+    public string flagUrl { get; set; }
 }
 
 public class Rate
@@ -16,7 +17,8 @@ public class Rate
     public string code { get; set; }
     public string no { get; set; }
     public string effectiveDate { get; set; }
-    public double mid { get; set; }
-    public double bid { get; set; }
-    public double ask { get; set; }
+    public decimal mid { get; set; }
+    public decimal bid { get; set; }
+    public decimal ask { get; set; }
+    public string flagUrl { get; set; }
 }

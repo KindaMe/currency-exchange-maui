@@ -1,7 +1,6 @@
 ﻿using api_access;
 using api_access.Models;
 using Microcharts;
-using SkiaSharp;
 using SkiaSharp.Views.Maui;
 
 namespace currency_exchange_maui;
@@ -11,31 +10,34 @@ public partial class RateDetailsPage : ContentPage
     public Rate DetailedRate { get; }
 
     private List<ChartEntry> _entries;
+    
+    private readonly IApiService _apiService;
 
-    public RateDetailsPage(Rate rate)
+    public RateDetailsPage(IApiService apiService, Rate rate)
     {
+        _apiService = apiService;
+
         InitializeComponent();
 
         DetailedRate = rate;
 
-        FirstEntryConvertRateLabel.Text = string.Format("  (1 {0} = {1:F5} {2})", "PLN",
-            1 / DetailedRate.mid, DetailedRate.code.ToUpper());
+        FirstEntryConvertRateLabel.Text = $"  (1 PLN = {1 / DetailedRate.bid:F8} {DetailedRate.code.ToUpper()})";
 
-        SecondEntryConvertRateLabel.Text = string.Format("  (1 {0} = {1:F5} {2})", DetailedRate.code.ToUpper(),
-            DetailedRate.mid, "PLN");
+        SecondEntryConvertRateLabel.Text = $"  (1 {DetailedRate.code.ToUpper()} = {DetailedRate.ask:F8} PLN)";
 
         BindingContext = this;
 
-        RefreshEntries(DateTime.Now.AddDays(-30));
+        RefreshEntries(DateOnly.FromDateTime(DateTime.Now.AddDays(-30)));
     }
 
-    private async void RefreshEntries(DateTime startDate)
+    private async void RefreshEntries(DateOnly startDate)
     {
-        var pog = await CurrencyExchangeAPI.GetCurrencyRates(DetailedRate.code, startDate, DateTime.Now);
+        var pog = await _apiService.GetCurrencyRatesAsync(DetailedRate.code, startDate,
+            DateOnly.FromDateTime(DateTime.Now));
 
         if (pog == null) return;
 
-        Color textColor = Colors.Transparent;
+        var textColor = Colors.Transparent;
 
         if (Application.Current != null)
         {
@@ -44,7 +46,7 @@ public partial class RateDetailsPage : ContentPage
                 : Color.FromArgb("#171514");
         }
 
-        int divider = (int)Math.Ceiling(pog.rates.Count / 14.0);
+        var divider = (int)Math.Ceiling(pog.rates.Count / 14.0);
 
         _entries = new List<ChartEntry>();
 
@@ -67,7 +69,7 @@ public partial class RateDetailsPage : ContentPage
 
     private void RefreshChart()
     {
-        Color bgColor = Colors.Transparent;
+        var bgColor = Colors.Transparent;
 
         if (Application.Current != null)
         {
@@ -81,7 +83,7 @@ public partial class RateDetailsPage : ContentPage
 
         if (minRate != null && maxRate != null)
         {
-            RateChartView.Chart = new LineChart()
+            RateChartView.Chart = new LineChart
             {
                 Entries = _entries,
                 MinValue = (float)minRate,
@@ -97,38 +99,38 @@ public partial class RateDetailsPage : ContentPage
             };
         }
     }
-    
+
     private void Button_OnClicked365(object sender, EventArgs e)
     {
-        RefreshEntries(DateTime.Now.AddDays(-365));
+        RefreshEntries(DateOnly.FromDateTime(DateTime.Now.AddDays(-365)));
     }
 
     private void Button_OnClicked90(object sender, EventArgs e)
     {
-        RefreshEntries(DateTime.Now.AddDays(-90));
+        RefreshEntries(DateOnly.FromDateTime(DateTime.Now.AddDays(-90)));
     }
 
     private void Button_OnClicked30(object sender, EventArgs e)
     {
-        RefreshEntries(DateTime.Now.AddDays(-30));
+        RefreshEntries(DateOnly.FromDateTime(DateTime.Now.AddDays(-30)));
     }
 
     private void Button_OnClicked7(object sender, EventArgs e)
     {
-        RefreshEntries(DateTime.Now.AddDays(-7));
+        RefreshEntries(DateOnly.FromDateTime(DateTime.Now.AddDays(-7)));
     }
 
     private void FirstCalcEntry_OnCompleted(object sender, EventArgs e)
     {
-        SecondCalcEntry.Text = double.TryParse(FirstCalcEntry.Text, out var initValue)
-            ? (initValue / DetailedRate.mid).ToString("F2")
+        SecondCalcEntry.Text = decimal.TryParse(FirstCalcEntry.Text, out var initValue)
+            ? (initValue / DetailedRate.ask).ToString("F2")
             : string.Empty;
     }
 
     private void SecondCalcEntry_OnCompleted(object sender, EventArgs e)
     {
-        FirstCalcEntry.Text = double.TryParse(SecondCalcEntry.Text, out var initValue)
-            ? (initValue * DetailedRate.mid).ToString("F2")
+        FirstCalcEntry.Text = decimal.TryParse(SecondCalcEntry.Text, out var initValue)
+            ? (initValue * DetailedRate.bid).ToString("F2")
             : string.Empty;
     }
 }

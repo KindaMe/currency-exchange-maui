@@ -10,12 +10,42 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <Label Grid.Row="0"
-                   Text="History"
-                   FontSize="38"
-                   FontAttributes="Bold"
-                   Margin="20"
-                   TextColor="{AppThemeBinding Light={StaticResource KSecondary}, Dark={StaticResource KWhite}}" />
+            <Grid Grid.Row="0" Margin="20" ColumnSpacing="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0"
+                    Text="History"
+                    FontSize="38"
+                    FontAttributes="Bold"
+                    TextColor="{AppThemeBinding Light={StaticResource KSecondary}, Dark={StaticResource KWhite}}" />
+                
+                <Label Grid.Column="1" 
+                       Text="{Binding DetailedWallet.Currency,StringFormat='{0:N2}'}" 
+                       VerticalTextAlignment="Center" 
+                       VerticalOptions="Center" 
+                       HorizontalTextAlignment="End"
+                       FontSize="22"
+                       FontAttributes="Bold"/>
+                
+                <Frame Grid.Column="2"
+                       CornerRadius="25"
+                       WidthRequest="50"
+                       HeightRequest="50"
+                       HasShadow="True"
+                       VerticalOptions="Center">
+
+                    <Image Source="{Binding DetailedWallet.FlagUrl}"
+                           Margin="0"
+                           WidthRequest="50"
+                           HeightRequest="50"
+                           Aspect="AspectFill" />
+                </Frame>
+            </Grid>
+
 
             <!-- <ActivityIndicator Grid.Row="1" -->
             <!--                    VerticalOptions="Center" -->
@@ -23,39 +53,24 @@
             <!--                    IsRunning="{Binding IsPageContentLoading}" /> -->
 
             <CollectionView Grid.Row="1"
-                            ItemsSource="{Binding DetailedWallet.Transactions}"
+                            ItemsSource="{Binding DetailedWallet.GroupedTransactions}"
+                            IsGrouped="True"
                             Margin="20,0">
                 <CollectionView.ItemsLayout>
-                    <LinearItemsLayout Orientation="Vertical"
-                                       ItemSpacing="10" />
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
                 </CollectionView.ItemsLayout>
+                <CollectionView.GroupHeaderTemplate>
+                    <DataTemplate>
+                        <Label Text="{Binding Key, StringFormat='{0:dd-MM-yyyy}'}"
+                               FontAttributes="Bold"
+                               FontSize="20"
+                               BackgroundColor="{StaticResource KPrimary}" TextColor="{StaticResource KWhite}" />
+                    </DataTemplate>
+                </CollectionView.GroupHeaderTemplate>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Grid>
-                            <Grid.Resources>
-                                <Style TargetType="{x:Type Label}">
-                                    <Setter Property="HorizontalTextAlignment" Value="Center" />
-                                    <Setter Property="HorizontalOptions" Value="Fill" />
-                                    <Setter Property="TextColor"
-                                            Value="{AppThemeBinding Light={StaticResource KSecondary}, Dark={StaticResource KWhite}}" />
-                                </Style>
-                            </Grid.Resources>
-
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            
-                            <Label Grid.Column="0"
-                                   Text="{Binding Date,StringFormat='{0:dd-MM-yyyy}'}"
-                                   FontSize="20" />
-
-                            <Label Grid.Column="1"
-                                   Text="{Binding AmountIn}"
-                                   FontSize="20"
-                                   FontAttributes="Bold" />
-                            
-                        </Grid>
+                        <Label Text="{Binding ConversionHistory}"
+                               FontSize="16" />
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>

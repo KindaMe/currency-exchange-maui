@@ -14,4 +14,6 @@ public partial class WalletDetailsPage : ContentPage
 
         BindingContext = this;
     }
+    
+    
 }

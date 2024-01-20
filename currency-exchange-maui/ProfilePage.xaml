@@ -2,8 +2,13 @@
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:currency_exchange_maui.Converters"
              x:Class="currency_exchange_maui.ProfilePage">
+    <ContentPage.Resources>
+        <converters:InvertBooleanConverter x:Key="InvertBooleanConverter" />
+    </ContentPage.Resources>
     <ContentPage.Content>
+
         <Grid Background="{AppThemeBinding Light={StaticResource KWhite}, Dark={StaticResource KSecondary}}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
@@ -18,10 +23,19 @@
                    Margin="20"
                    TextColor="{AppThemeBinding Light={StaticResource KSecondary}, Dark={StaticResource KWhite}}" />
 
-            <StackLayout Grid.Row="1" VerticalOptions="Start">
+            <ActivityIndicator x:Name="Indicator" Grid.Row="1"
+                               VerticalOptions="Center"
+                               HorizontalOptions="Center"
+                               IsRunning="{Binding IsPageContentLoading}" />
+
+            <StackLayout Grid.Row="1"
+                         IsVisible="{Binding IsPageContentLoading, Converter={StaticResource InvertBooleanConverter}}"
+                         VerticalOptions="Start">
 
                 <Grid Margin="20,0" ColumnSpacing="20" RowSpacing="10">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
                         <RowDefinition Height="*" />
                         <RowDefinition Height="*" />
                         <RowDefinition Height="*" />
@@ -35,85 +49,117 @@
                     <Frame Grid.Column="0"
                            Grid.Row="0"
                            Grid.RowSpan="3"
-                           CornerRadius="100"
+                           CornerRadius="40"
+                           HeightRequest="80"
+                           WidthRequest="80"
+                           Padding="5"
                            BackgroundColor="{AppThemeBinding Light={StaticResource KWhite}, Dark={StaticResource KPrimary}}">
-                        <Image Source="dotnet_bot.svg"
-                               WidthRequest="50"
-                               HeightRequest="50" />
+                        <Image Source="user_icon.svg"
+                               Aspect="AspectFit" />
                     </Frame>
 
                     <Label Grid.Column="1"
                            Grid.Row="0"
-                           Text="FName LName"
+                           Text="{Binding UserDetails.FullName}"
                            FontSize="22"
                            FontAttributes="Bold"
                            HorizontalTextAlignment="Start"
-                           VerticalTextAlignment="Center" />
+                           VerticalTextAlignment="Center" 
+                           VerticalOptions="End"/>
 
                     <Label Grid.Column="1"
                            Grid.Row="1"
-                           Text="Email"
+                           Text="{Binding UserDetails.Email}"
                            FontSize="18"
                            HorizontalTextAlignment="Start"
-                           VerticalTextAlignment="Center" />
+                           VerticalTextAlignment="Center" 
+                           VerticalOptions="Center"/>
 
                     <Label Grid.Column="1"
                            Grid.Row="2"
-                           Text="Password"
+                           Text="{Binding UserDetails.Password}"
                            FontSize="18"
                            HorizontalTextAlignment="Start"
-                           VerticalTextAlignment="Center" />
+                           VerticalTextAlignment="Center" 
+                           VerticalOptions="Start"/>
 
                     <Button Grid.Column="0"
                             Grid.Row="3"
                             Grid.ColumnSpan="2"
-                            Text="Edit Profile"
+                            Text="Change Email"
                             BackgroundColor="{AppThemeBinding Light={StaticResource KPrimary}, Dark={StaticResource KPrimary}}"
                             TextColor="{AppThemeBinding Light={StaticResource KWhite}, Dark={StaticResource KWhite}}"
                             FontAttributes="Bold"
                             CornerRadius="15"
                             MinimumHeightRequest="55"
-                            FontSize="18">
+                            FontSize="18"
+                            Clicked="ChangeEmailButton_OnClicked">
+                    </Button>
+
+                    <Button Grid.Column="0"
+                            Grid.Row="4"
+                            Grid.ColumnSpan="2"
+                            Text="Change Password"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource KPrimary}, Dark={StaticResource KPrimary}}"
+                            TextColor="{AppThemeBinding Light={StaticResource KWhite}, Dark={StaticResource KWhite}}"
+                            FontAttributes="Bold"
+                            CornerRadius="15"
+                            MinimumHeightRequest="55"
+                            FontSize="18"
+                            Clicked="ChangePasswordButton_OnClicked">
+                    </Button>
+                    
+                    <Button Grid.Column="0"
+                            Grid.Row="5"
+                            Grid.ColumnSpan="2"
+                            Text="Delete Account"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource KPrimary}, Dark={StaticResource KPrimary}}"
+                            TextColor="{AppThemeBinding Light={StaticResource KWhite}, Dark={StaticResource KWhite}}"
+                            FontAttributes="Bold"
+                            CornerRadius="15"
+                            MinimumHeightRequest="55"
+                            FontSize="18"
+                            Clicked="DeleteAccountButton_OnClicked">
                     </Button>
                 </Grid>
 
-                <Grid Margin="20,20">
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
+                <!-- <Grid Margin="20,20"> -->
+                <!--     <Grid.RowDefinitions> -->
+                <!--         <RowDefinition /> -->
+                <!--         <RowDefinition /> -->
+                <!--     </Grid.RowDefinitions> -->
+                <!-- -->
+                <!--     <Label Grid.Row="0" -->
+                <!--            Text="Payment Methods" -->
+                <!--            FontSize="20" -->
+                <!--            FontAttributes="Bold" /> -->
+                <!--     <CollectionView Grid.Row="1"> -->
+                <!--         <CollectionView.ItemsLayout> -->
+                <!--             <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" /> -->
+                <!--         </CollectionView.ItemsLayout> -->
+                <!--         <CollectionView.ItemTemplate> -->
+                <!--             <DataTemplate> -->
+                <!--                 ~1~ payment methods template goes here@1@ -->
+                <!--             </DataTemplate> -->
+                <!--         </CollectionView.ItemTemplate> -->
+                <!--     </CollectionView> -->
+                <!-- </Grid> -->
 
-                    <Label Grid.Row="0"
-                           Text="Payment Methods"
-                           FontSize="20"
-                           FontAttributes="Bold" />
-                    <CollectionView Grid.Row="1">
-                        <CollectionView.ItemsLayout>
-                            <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
-                        </CollectionView.ItemsLayout>
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                <!-- payment methods template goes here-->
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-                </Grid>
-
-                <Grid Margin="20,20">
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
-
-                    <Label Grid.Row="0"
-                           Text="App Settings"
-                           FontSize="20"
-                           FontAttributes="Bold" />
-                    <StackLayout Grid.Row="1"
-                                 Orientation="Vertical">
-                        <!-- settings controls go here-->
-                    </StackLayout>
-                </Grid>
+                <!-- <Grid Margin="20,20"> -->
+                <!--     <Grid.RowDefinitions> -->
+                <!--         <RowDefinition /> -->
+                <!--         <RowDefinition /> -->
+                <!--     </Grid.RowDefinitions> -->
+                <!-- -->
+                <!--     <Label Grid.Row="0" -->
+                <!--            Text="App Settings" -->
+                <!--            FontSize="20" -->
+                <!--            FontAttributes="Bold" /> -->
+                <!--     <StackLayout Grid.Row="1" -->
+                <!--                  Orientation="Vertical"> -->
+                <!--         ~1~ settings controls go here@1@ -->
+                <!--     </StackLayout> -->
+                <!-- </Grid> -->
             </StackLayout>
 
             <Button Grid.Row="2"

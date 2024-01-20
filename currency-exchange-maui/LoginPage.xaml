@@ -6,7 +6,7 @@
              BackgroundColor="{AppThemeBinding Light={StaticResource KWhite}, Dark={StaticResource KSecondary}}">
     <ContentPage.Content>
         <Grid>
-            <StackLayout x:Name="testpog"
+            <StackLayout x:Name="MainStackLayout"
                          VerticalOptions="CenterAndExpand"
                          HorizontalOptions="CenterAndExpand"
                          WidthRequest="200">
@@ -28,7 +28,7 @@
                                 Value="{AppThemeBinding Light={StaticResource KSecondary}, Dark={StaticResource KWhite}}" />
                     </Style>
                 </StackLayout.Resources>
-                <Image Source="dotnet_bot.png"
+                <Image Source="logo.png"
                        HeightRequest="100"
                        WidthRequest="100" />
                 <Entry Placeholder="Email"

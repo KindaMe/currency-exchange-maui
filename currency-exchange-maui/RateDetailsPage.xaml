@@ -24,7 +24,7 @@
                    TextTransform="Uppercase"
                    Margin="20,20,20,0" />
             <Label Grid.Row="1"
-                   Text="{Binding DetailedRate.Currency}"
+                   Text="{Binding DetailedRate.currency}"
                    FontSize="22"
                    HorizontalOptions="Start"
                    TextTransform="Default"

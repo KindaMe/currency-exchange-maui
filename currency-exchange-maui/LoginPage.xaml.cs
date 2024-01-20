@@ -1,12 +1,17 @@
 ﻿using api_access;
-using api_access.Models;
+using api_access.DTOs;
+using CommunityToolkit.Maui.Core.Platform;
 
 namespace currency_exchange_maui;
 
 public partial class LoginPage : ContentPage
 {
-    public LoginPage()
+    private readonly IApiService _apiService;
+
+    public LoginPage(IApiService apiService)
     {
+        _apiService = apiService;
+
         InitializeComponent();
 
         NavigationPage.SetHasNavigationBar(this, false);
@@ -14,20 +19,21 @@ public partial class LoginPage : ContentPage
 
     private async void OnLoginButtonClicked(object sender, EventArgs e)
     {
-        var  userCredentials = new UserCredentialsModel
+        await PasswordEntry.HideKeyboardAsync(CancellationToken.None);
+        
+        var userCredentials = new UserCredentialsDto
         {
             Email = EmailEntry.Text,
             Password = PasswordEntry.Text
         };
 
-        await testpog.TranslateTo(0, -2000, 1000, Easing.SpringIn);
+        await MainStackLayout.TranslateTo(0, -2000, 1000, Easing.SpringIn);
 
         Indicator.IsRunning = true;
-        var authToken = await CurrencyExchangeAPI.RequestToken(userCredentials);
+        await _apiService.RequestAndSetTokenAsync(userCredentials);
 
-        if (authToken != null)
+        if (_apiService.GetAuthToken() != null)
         {
-            Preferences.Set(nameof(CurrencyExchangeAPI.AuthToken), authToken);
             if (Application.Current != null)
             {
                 Application.Current.MainPage = new AppShell();
@@ -36,28 +42,17 @@ public partial class LoginPage : ContentPage
         else
         {
             Indicator.IsRunning = false;
-            await testpog.TranslateTo(0, 0, 1000, Easing.SpringOut);
+            await MainStackLayout.TranslateTo(0, 0, 1000, Easing.SpringOut);
         }
     }
 
     private void OnRegisterButtonClicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new RegisterPage());
+        Navigation.PushAsync(new RegisterPage(_apiService));
     }
 
     private void OnFirstEntryCompleted(object sender, EventArgs e)
     {
         PasswordEntry.Focus();
-    }
-
-    protected override void OnAppearing()
-    {
-        if (CurrencyExchangeAPI.AuthToken != null)
-        {
-            if (Application.Current != null)
-            {
-                Application.Current.MainPage = new AppShell();
-            }
-        }
     }
 }

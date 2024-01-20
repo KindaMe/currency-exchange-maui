@@ -32,10 +32,10 @@
 
     <ItemGroup>
         <!-- App Icon -->
-        <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4"/>
+        <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#171514"/>
 
         <!-- Splash Screen -->
-        <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128"/>
+        <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#171514" BaseSize="128,128"/>
 
         <!-- Images -->
         <MauiImage Include="Resources\Images\*"/>
@@ -49,12 +49,26 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microcharts.Maui" Version="1.0.0" />
+        <PackageReference Include="CommunityToolkit.Maui" Version="6.1.0"/>
+        <PackageReference Include="Microcharts.Maui" Version="1.0.0"/>
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\api-access\api-access.csproj" />
+        <ProjectReference Include="..\api-access\api-access.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <MauiXaml Update="LoginShell.xaml">
+            <SubType>Designer</SubType>
+        </MauiXaml>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Update="LoginShell.xaml.cs">
+            <DependentUpon>LoginShell.xaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
     </ItemGroup>
 
 </Project>

@@ -1,5 +1,7 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows.Input;
 using api_access;
+using api_access.DTOs;
 using api_access.Models;
 
 namespace currency_exchange_maui;
@@ -13,11 +15,24 @@ public partial class WalletPage : ContentPage
         get => _isPageContentLoading;
         set
         {
-            if (_isPageContentLoading != value)
-            {
-                _isPageContentLoading = value;
-                OnPropertyChanged();
-            }
+            if (_isPageContentLoading == value) return;
+
+            _isPageContentLoading = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private bool _isButtonProcessing = false;
+
+    public bool IsButtonProcessing
+    {
+        get => _isButtonProcessing;
+        set
+        {
+            if (_isButtonProcessing == value) return;
+
+            _isButtonProcessing = value;
+            OnPropertyChanged();
         }
     }
 
@@ -28,70 +43,37 @@ public partial class WalletPage : ContentPage
         get => _wallets;
         set
         {
-            if (_wallets != value)
-            {
-                _wallets = value;
-                OnPropertyChanged();
-            }
+            if (_wallets == value) return;
+
+            _wallets = value;
+            OnPropertyChanged();
         }
     }
 
-    private double _totalBalance;
+    private decimal _totalBalanceInLocalCurrency;
 
-    public double TotalBalance
+    public decimal TotalBalanceInLocalCurrency
     {
-        get => _totalBalance;
+        get => _totalBalanceInLocalCurrency;
         set
         {
-            if (Math.Abs(_totalBalance - value) > 0.01)
-            {
-                _totalBalance = Math.Round(value, 2);
-                OnPropertyChanged();
-            }
+            _totalBalanceInLocalCurrency = value;
+            OnPropertyChanged();
         }
     }
 
-    private double _totalGain;
+    public ICommand RefreshCommand { get; }
+    private readonly IApiService _apiService;
 
-    public double TotalGain
+    public WalletPage(IApiService apiService)
     {
-        get => _totalGain;
-        set
-        {
-            if (Math.Abs(_totalGain - value) > 0.01)
-            {
-                _totalGain = Math.Round(value, 2);
-                OnPropertyChanged();
-            }
-        }
-    }
+        _apiService = apiService;
 
-    private double _totalGainPercentage;
+        RefreshCommand = new Command(LoadPageContent);
 
-    public double TotalGainPercentage
-    {
-        get => _totalGainPercentage;
-        set
-        {
-            if (Math.Abs(_totalGainPercentage - value) > 0.01)
-            {
-                _totalGainPercentage = Math.Round(value, 2);
-                OnPropertyChanged();
-            }
-        }
-    }
-
-
-    public WalletPage()
-    {
         InitializeComponent();
 
         BindingContext = this;
-    }
-
-    protected override void OnAppearing()
-    {
-        base.OnAppearing();
 
         LoadPageContent();
     }
@@ -99,75 +81,31 @@ public partial class WalletPage : ContentPage
     private async void LoadPageContent()
     {
         Wallets.Clear();
-        TotalBalance = 0;
-        TotalGain = 0;
-        TotalGainPercentage = 0;
+        TotalBalanceInLocalCurrency = 0;
 
         IsPageContentLoading = true;
+        IsButtonProcessing = true;
 
-        try
+        var wallets = await _apiService.GetWalletsAsync();
+
+        if (wallets == null) return;
+
+        var rateTable = await _apiService.GetCurrentRatesAsync();
+
+        foreach (var wallet in wallets)
         {
-            var wallets = await CurrencyExchangeAPI.GetWallets();
-
-            if (wallets == null) return;
-
-            double portfolioTotalValue = 0;
-            double portfolioInitialTotalValue = 0;
-            double portfolioGain = 0;
-
-            foreach (var wallet in wallets)
-            {
-                double walletInitialTotalValue = 0;
-
-                if (wallet.Currency != "PLN")
-                {
-                    var rate = await CurrencyExchangeAPI.GetCurrentCurrencyRate(wallet.Currency);
-                    wallet.CurrentRate = rate.rates[0].mid;
-
-                    foreach (var transaction in wallet.Transactions)
-                    {
-                        var transactionOldRate =
-                            await CurrencyExchangeAPI.GetCurrencyRates(wallet.Currency, transaction.Date.AddDays(-7),
-                                transaction.Date);
-
-                        walletInitialTotalValue += (double)transaction.AmountIn * transactionOldRate.rates[^1].mid;
-                    }
-
-                    var walletGain = wallet.ConvertedBalance - walletInitialTotalValue;
-
-                    portfolioGain += walletGain;
-
-                    wallet.GainPercentage = (walletGain / walletInitialTotalValue) * 100.0d;
-                }
-                else
-                {
-                    wallet.CurrentRate = 1;
-
-                    foreach (var transaction in wallet.Transactions)
-                    {
-                        walletInitialTotalValue += (double)transaction.AmountIn;
-                    }
-                }
-
-                portfolioInitialTotalValue += walletInitialTotalValue;
-                portfolioTotalValue += wallet.ConvertedBalance;
-            }
-
-            Wallets = new ObservableCollection<WalletModel>(wallets);
-
-
-            TotalBalance = portfolioTotalValue;
-
-            TotalGain = portfolioGain;
-
-            TotalGainPercentage = ((portfolioTotalValue - portfolioInitialTotalValue) / portfolioInitialTotalValue) *
-                                  100;
+            wallet.InitWalletDetails(rateTable);
         }
-        finally
-        {
-            IsPageContentLoading = false;
-        }
+
+        TotalBalanceInLocalCurrency = wallets.Sum(wallet => wallet.CurrentBalanceInLocalCurrency);
+
+        Wallets = new ObservableCollection<WalletModel>(wallets);
+
+
+        IsPageContentLoading = false;
+        IsButtonProcessing = false;
     }
+
 
     private void OpenDetails(object sender, TappedEventArgs e)
     {
@@ -179,11 +117,53 @@ public partial class WalletPage : ContentPage
 
     private void BuyButton_OnClicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new BuyPage());
+        var page = new BuyPage(_apiService, Wallets);
+        
+        page.Disappearing += (o, args) => LoadPageContent();
+        
+        Navigation.PushAsync(page);
     }
 
     private void WithdrawButton_OnClicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new WithdrawPage());
+        var page = new WithdrawPage(_apiService, Wallets);
+        
+        page.Disappearing += (o, args) => LoadPageContent();
+        
+        Navigation.PushAsync(page);
+    }
+
+    private async void ImageButton_OnClicked(object sender, EventArgs e)
+    {
+        if (sender is not ImageButton clickedButton) return;
+
+        IsButtonProcessing = true;
+
+        try
+        {
+            var ratesTable = await _apiService.GetCurrentRatesAsync();
+            var codes = ratesTable.rates.Select(rate => rate.code).ToList();
+            var codesWithoutOwnedCurrencies =
+                codes.Where(code => !Wallets.Select(wallet => wallet.Currency).Contains(code)).ToList();
+
+            var result = await DisplayActionSheet("Select currency for the new wallet:", "Cancel", null,
+                codesWithoutOwnedCurrencies.ToArray());
+
+            if (result is null or "Cancel") return;
+
+            var isSuccessful = await _apiService.PostWalletAsync(new WalletDto { Code = result });
+            if (isSuccessful)
+            {
+                await DisplayAlert("Wallet created!", $"You selected: {result}", "OK");
+            }
+            else
+            {
+                await DisplayAlert("Error!", "Something went wrong!", "OK");
+            }
+        }
+        finally
+        {
+            LoadPageContent();
+        }
     }
 }

@@ -2,6 +2,7 @@
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:sys="clr-namespace:System;assembly=System.Runtime"
              x:Class="currency_exchange_maui.RatesPage">
     <ContentPage.Content>
         <Grid Background="{AppThemeBinding Light={StaticResource KWhite}, Dark={StaticResource KSecondary}}">
@@ -10,101 +11,123 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <Label Grid.Row="0"
-                   Text="Rates"
-                   FontSize="38"
-                   FontAttributes="Bold"
-                   Margin="20"
-                   TextColor="{AppThemeBinding Light={StaticResource KSecondary}, Dark={StaticResource KWhite}}" />
+            <Grid Grid.Row="0" Margin="0" Padding="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
 
-            <ActivityIndicator Grid.Row="1"
-                               VerticalOptions="Center"
-                               HorizontalOptions="Center"
-                               IsRunning="{Binding IsPageContentLoading}" />
+                <Label Grid.Column="0"
+                       Text="Rates"
+                       FontSize="38"
+                       FontAttributes="Bold"
+                       Margin="20"
+                       TextColor="{AppThemeBinding Light={StaticResource KSecondary}, Dark={StaticResource KWhite}}" />
 
-            <CollectionView Grid.Row="1"
-                            ItemsSource="{Binding Rates}"
-                            Margin="20,0">
-                <CollectionView.ItemsLayout>
-                    <LinearItemsLayout Orientation="Vertical"
-                                       ItemSpacing="10" />
-                </CollectionView.ItemsLayout>
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <Grid.Resources>
-                                <Style TargetType="{x:Type Label}">
-                                    <Setter Property="HorizontalTextAlignment" Value="Center" />
-                                    <Setter Property="HorizontalOptions" Value="Fill" />
-                                    <Setter Property="TextColor"
-                                            Value="{AppThemeBinding Light={StaticResource KSecondary}, Dark={StaticResource KWhite}}" />
-                                </Style>
-                            </Grid.Resources>
+                <DatePicker x:Name="DatePicker"
+                            Grid.Column="1"
+                            VerticalOptions="Center"
+                            Margin="20,0"
+                            MaximumDate="{x:Static sys:DateTime.Now}"
+                            FontSize="18"
+                            FontAttributes="Bold"
+                            Format="dd/MM/yyyy"
+                            HorizontalOptions="End"
+                            DateSelected="DatePicker_OnDateSelected" />
 
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
+            </Grid>
 
-                            <Grid.RowDefinitions>
-                                <RowDefinition />
-                                <RowDefinition />
-                            </Grid.RowDefinitions>
 
-                            <Grid.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OpenDetails" />
-                            </Grid.GestureRecognizers>
+            <RefreshView Grid.Row="1"
+                         IsRefreshing="{Binding IsPageContentLoading}"
+                         Command="{Binding RefreshCommand}"
+                         Margin="20,0">
+                
+                <CollectionView ItemsSource="{Binding Rates}">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical"
+                                           ItemSpacing="10" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.Resources>
+                                    <Style TargetType="{x:Type Label}">
+                                        <Setter Property="HorizontalTextAlignment" Value="Center" />
+                                        <Setter Property="HorizontalOptions" Value="Fill" />
+                                        <Setter Property="TextColor"
+                                                Value="{AppThemeBinding Light={StaticResource KSecondary}, Dark={StaticResource KWhite}}" />
+                                    </Style>
+                                </Grid.Resources>
 
-                            <StackLayout Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Orientation="Vertical">
-                                <Frame CornerRadius="25"
-                                       WidthRequest="50"
-                                       HeightRequest="50">
-                                    <Image Source="flag_20x30.jpg"
-                                           VerticalOptions="Fill"
-                                           Margin="0"
-                                           WidthRequest="80"
-                                           HeightRequest="80" />
-                                </Frame>
-                                <Label Text="{Binding code}"
-                                       FontAttributes="Bold" />
-                            </StackLayout>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
 
-                            <StackLayout Grid.Column="1" Grid.Row="0"
-                                         Orientation="Horizontal"
-                                         HorizontalOptions="Center">
-                                <Label Text="{Binding bid}"
-                                       VerticalOptions="End"
-                                       FontSize="20"
-                                       FontAttributes="Bold" />
-                                <Label Text=" PLN"
-                                       VerticalOptions="End"
-                                       FontSize="20"
-                                       FontAttributes="Bold" />
-                            </StackLayout>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
 
-                            <Label Grid.Column="1" Grid.Row="1"
-                                   Text="bid" />
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OpenDetails" />
+                                </Grid.GestureRecognizers>
 
-                            <StackLayout Grid.Column="2" Grid.Row="0"
-                                         Orientation="Horizontal"
-                                         HorizontalOptions="Center">
-                                <Label Text="{Binding ask}"
-                                       VerticalOptions="End"
-                                       FontSize="20"
-                                       FontAttributes="Bold" />
-                                <Label Text=" PLN"
-                                       VerticalOptions="End"
-                                       FontSize="20"
-                                       FontAttributes="Bold" />
-                            </StackLayout>
+                                <StackLayout Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Orientation="Vertical">
+                                    <Frame CornerRadius="25"
+                                           WidthRequest="50"
+                                           HeightRequest="50"
+                                           HasShadow="True">
+                                        <Image Source="{Binding flagUrl}"
+                                               Margin="0"
+                                               WidthRequest="50"
+                                               HeightRequest="50"
+                                               Aspect="AspectFill" />
+                                    </Frame>
+                                    <Label Text="{Binding code}"
+                                           FontAttributes="Bold" />
+                                </StackLayout>
 
-                            <Label Grid.Column="2" Grid.Row="1"
-                                   Text="ask" />
-                        </Grid>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+                                <StackLayout Grid.Column="1" Grid.Row="0"
+                                             Orientation="Horizontal"
+                                             HorizontalOptions="Center">
+                                    <Label Text="{Binding bid}"
+                                           VerticalOptions="End"
+                                           FontSize="20"
+                                           FontAttributes="Bold" />
+                                    <Label Text=" PLN"
+                                           VerticalOptions="End"
+                                           FontSize="20"
+                                           FontAttributes="Bold" />
+                                </StackLayout>
+
+                                <Label Grid.Column="1" Grid.Row="1"
+                                       Text="Bid" />
+
+                                <StackLayout Grid.Column="2" Grid.Row="0"
+                                             Orientation="Horizontal"
+                                             HorizontalOptions="Center">
+                                    <Label Text="{Binding ask}"
+                                           VerticalOptions="End"
+                                           FontSize="20"
+                                           FontAttributes="Bold" />
+                                    <Label Text=" PLN"
+                                           VerticalOptions="End"
+                                           FontSize="20"
+                                           FontAttributes="Bold" />
+                                </StackLayout>
+
+                                <Label Grid.Column="2" Grid.Row="1"
+                                       Text="Ask" />
+                            </Grid>
+                        </DataTemplate>
+                        
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
         </Grid>
     </ContentPage.Content>
 </ContentPage>
