@@ -21,6 +21,20 @@ public partial class BuyPage : ContentPage
             OnPropertyChanged();
         }
     }
+    
+    private bool _isButtonProcessing = false;
+
+    public bool IsButtonProcessing
+    {
+        get => _isButtonProcessing;
+        set
+        {
+            if (_isButtonProcessing == value) return;
+
+            _isButtonProcessing = value;
+            OnPropertyChanged();
+        }
+    }
 
     private readonly IApiService _apiService;
 
@@ -130,6 +144,8 @@ public partial class BuyPage : ContentPage
 
     private async void Button_OnClicked(object sender, EventArgs e)
     {
+        IsButtonProcessing = true;
+        
         TransactionDto data;
 
         if (SourceCreditCard.IsChecked)
@@ -140,6 +156,7 @@ public partial class BuyPage : ContentPage
             if (targetWallet == null || amount <= 0)
             {
                 await DisplayAlert("Error", "Invalid data", "OK");
+                IsButtonProcessing = false;
                 return;
             }
 
@@ -159,6 +176,7 @@ public partial class BuyPage : ContentPage
             if (targetWallet == null || sourceWallet == null || amount <= 0)
             {
                 await DisplayAlert("Error", "Invalid data", "OK");
+                IsButtonProcessing = false;
                 return;
             }
 
@@ -173,6 +191,7 @@ public partial class BuyPage : ContentPage
         else
         {
             await DisplayAlert("Error", "Invalid data", "OK");
+            IsButtonProcessing = false;
             return;
         }
 
@@ -189,6 +208,8 @@ public partial class BuyPage : ContentPage
         }
 
         await Navigation.PopAsync();
+        
+        IsButtonProcessing = false;
     }
 
     private void UpdateBottomPanel()

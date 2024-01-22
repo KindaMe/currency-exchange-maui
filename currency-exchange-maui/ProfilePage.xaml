@@ -64,24 +64,24 @@
                            FontSize="22"
                            FontAttributes="Bold"
                            HorizontalTextAlignment="Start"
-                           VerticalTextAlignment="Center" 
-                           VerticalOptions="End"/>
+                           VerticalTextAlignment="Center"
+                           VerticalOptions="End" />
 
                     <Label Grid.Column="1"
                            Grid.Row="1"
                            Text="{Binding UserDetails.Email}"
                            FontSize="18"
                            HorizontalTextAlignment="Start"
-                           VerticalTextAlignment="Center" 
-                           VerticalOptions="Center"/>
+                           VerticalTextAlignment="Center"
+                           VerticalOptions="Center" />
 
                     <Label Grid.Column="1"
                            Grid.Row="2"
                            Text="{Binding UserDetails.Password}"
                            FontSize="18"
                            HorizontalTextAlignment="Start"
-                           VerticalTextAlignment="Center" 
-                           VerticalOptions="Start"/>
+                           VerticalTextAlignment="Center"
+                           VerticalOptions="Start" />
 
                     <Button Grid.Column="0"
                             Grid.Row="3"
@@ -93,7 +93,8 @@
                             CornerRadius="15"
                             MinimumHeightRequest="55"
                             FontSize="18"
-                            Clicked="ChangeEmailButton_OnClicked">
+                            Clicked="ChangeEmailButton_OnClicked"
+                            IsEnabled="{Binding IsButtonProcessing, Converter={StaticResource InvertBooleanConverter}}">
                     </Button>
 
                     <Button Grid.Column="0"
@@ -106,9 +107,10 @@
                             CornerRadius="15"
                             MinimumHeightRequest="55"
                             FontSize="18"
-                            Clicked="ChangePasswordButton_OnClicked">
+                            Clicked="ChangePasswordButton_OnClicked"
+                            IsEnabled="{Binding IsButtonProcessing, Converter={StaticResource InvertBooleanConverter}}">
                     </Button>
-                    
+
                     <Button Grid.Column="0"
                             Grid.Row="5"
                             Grid.ColumnSpan="2"
@@ -119,47 +121,11 @@
                             CornerRadius="15"
                             MinimumHeightRequest="55"
                             FontSize="18"
-                            Clicked="DeleteAccountButton_OnClicked">
+                            Clicked="DeleteAccountButton_OnClicked"
+                            IsEnabled="{Binding IsButtonProcessing, Converter={StaticResource InvertBooleanConverter}}">
                     </Button>
                 </Grid>
-
-                <!-- <Grid Margin="20,20"> -->
-                <!--     <Grid.RowDefinitions> -->
-                <!--         <RowDefinition /> -->
-                <!--         <RowDefinition /> -->
-                <!--     </Grid.RowDefinitions> -->
-                <!-- -->
-                <!--     <Label Grid.Row="0" -->
-                <!--            Text="Payment Methods" -->
-                <!--            FontSize="20" -->
-                <!--            FontAttributes="Bold" /> -->
-                <!--     <CollectionView Grid.Row="1"> -->
-                <!--         <CollectionView.ItemsLayout> -->
-                <!--             <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" /> -->
-                <!--         </CollectionView.ItemsLayout> -->
-                <!--         <CollectionView.ItemTemplate> -->
-                <!--             <DataTemplate> -->
-                <!--                 ~1~ payment methods template goes here@1@ -->
-                <!--             </DataTemplate> -->
-                <!--         </CollectionView.ItemTemplate> -->
-                <!--     </CollectionView> -->
-                <!-- </Grid> -->
-
-                <!-- <Grid Margin="20,20"> -->
-                <!--     <Grid.RowDefinitions> -->
-                <!--         <RowDefinition /> -->
-                <!--         <RowDefinition /> -->
-                <!--     </Grid.RowDefinitions> -->
-                <!-- -->
-                <!--     <Label Grid.Row="0" -->
-                <!--            Text="App Settings" -->
-                <!--            FontSize="20" -->
-                <!--            FontAttributes="Bold" /> -->
-                <!--     <StackLayout Grid.Row="1" -->
-                <!--                  Orientation="Vertical"> -->
-                <!--         ~1~ settings controls go here@1@ -->
-                <!--     </StackLayout> -->
-                <!-- </Grid> -->
+                
             </StackLayout>
 
             <Button Grid.Row="2"
@@ -171,7 +137,8 @@
                     CornerRadius="15"
                     MinimumHeightRequest="55"
                     FontSize="18"
-                    Margin="20" />
+                    Margin="20" 
+                    IsEnabled="{Binding IsButtonProcessing, Converter={StaticResource InvertBooleanConverter}}"/>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

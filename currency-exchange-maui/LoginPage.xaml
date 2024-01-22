@@ -2,8 +2,12 @@
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:currency_exchange_maui.Converters"
              x:Class="currency_exchange_maui.LoginPage"
              BackgroundColor="{AppThemeBinding Light={StaticResource KWhite}, Dark={StaticResource KSecondary}}">
+    <ContentPage.Resources>
+        <converters:InvertBooleanConverter x:Key="InvertBooleanConverter" />
+    </ContentPage.Resources>
     <ContentPage.Content>
         <Grid>
             <StackLayout x:Name="MainStackLayout"
@@ -19,6 +23,7 @@
                         <Setter Property="FontAttributes" Value="Bold" />
                         <Setter Property="CornerRadius" Value="15" />
                         <Setter Property="FontSize" Value="18" />
+                        <Setter Property="IsEnabled" Value="{Binding IsButtonProcessing, Converter={StaticResource InvertBooleanConverter}}"/>
                     </Style>
                     <Style TargetType="Entry">
                         <Setter Property="FontSize" Value="18" />

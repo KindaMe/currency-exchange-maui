@@ -117,19 +117,23 @@ public partial class WalletPage : ContentPage
 
     private void BuyButton_OnClicked(object sender, EventArgs e)
     {
+        IsButtonProcessing = true;
+
         var page = new BuyPage(_apiService, Wallets);
-        
+
         page.Disappearing += (o, args) => LoadPageContent();
-        
+
         Navigation.PushAsync(page);
     }
 
     private void WithdrawButton_OnClicked(object sender, EventArgs e)
     {
+        IsButtonProcessing = true;
+        
         var page = new WithdrawPage(_apiService, Wallets);
-        
+
         page.Disappearing += (o, args) => LoadPageContent();
-        
+
         Navigation.PushAsync(page);
     }
 

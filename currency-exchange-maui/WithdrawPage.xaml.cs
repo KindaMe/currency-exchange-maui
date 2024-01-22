@@ -21,6 +21,20 @@ public partial class WithdrawPage : ContentPage
             OnPropertyChanged();
         }
     }
+    
+    private bool _isButtonProcessing = false;
+
+    public bool IsButtonProcessing
+    {
+        get => _isButtonProcessing;
+        set
+        {
+            if (_isButtonProcessing == value) return;
+
+            _isButtonProcessing = value;
+            OnPropertyChanged();
+        }
+    }
 
     private readonly IApiService _apiService;
 
@@ -71,12 +85,15 @@ public partial class WithdrawPage : ContentPage
 
     private async void Button_OnClicked(object sender, EventArgs e)
     {
+        IsButtonProcessing = true;
+        
         var sourceWallet = (WalletModel)SourceWalletPicker.SelectedItem;
         var amount = decimal.TryParse(AmountEntry.Text, out var result) ? result : 0;
 
         if (sourceWallet == null || result <= 0)
         {
             await DisplayAlert("Error", "Invalid data", "OK");
+            IsButtonProcessing = false;
             return;
         }
 
@@ -99,5 +116,7 @@ public partial class WithdrawPage : ContentPage
         }
         
         await Navigation.PopAsync();
+        
+        IsButtonProcessing = false;
     }
 }

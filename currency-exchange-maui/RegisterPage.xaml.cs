@@ -6,6 +6,20 @@ namespace currency_exchange_maui;
 
 public partial class RegisterPage : ContentPage
 {
+    private bool _isButtonProcessing = false;
+
+    public bool IsButtonProcessing
+    {
+        get => _isButtonProcessing;
+        set
+        {
+            if (_isButtonProcessing == value) return;
+
+            _isButtonProcessing = value;
+            OnPropertyChanged();
+        }
+    }
+    
     public UserModel NewUser { get; set; } = new();
 
     private readonly IApiService _apiService;
@@ -21,6 +35,8 @@ public partial class RegisterPage : ContentPage
 
     private async void Button_OnClicked(object sender, EventArgs e)
     {
+        IsButtonProcessing = true;
+        
         await PasswordEntry.HideKeyboardAsync(CancellationToken.None);
         
         var isSuccessful = await _apiService.PostUserAsync(NewUser);
@@ -35,5 +51,7 @@ public partial class RegisterPage : ContentPage
         }
         
         await Navigation.PopAsync();
+        
+        IsButtonProcessing = false;
     }
 }
