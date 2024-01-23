@@ -9,7 +9,6 @@ namespace api_access;
 public interface IApiService
 {
     event EventHandler UnauthorizedRequest;
-    void OnUnauthorizedRequest();
     string GetAuthToken();
     void SetAuthToken(string token);
 
@@ -39,7 +38,7 @@ public class ApiService : IApiService
 
     public event EventHandler UnauthorizedRequest;
 
-    public void OnUnauthorizedRequest()
+    private void OnUnauthorizedRequest()
     {
         SetAuthToken(null);
         UnauthorizedRequest?.Invoke(this, EventArgs.Empty);

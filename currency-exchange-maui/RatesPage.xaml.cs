@@ -36,6 +36,7 @@ public partial class RatesPage : ContentPage
     }
 
     public ICommand RefreshCommand { get; }
+
     private readonly IApiService _apiService;
 
     public RatesPage(IApiService apiService)
@@ -43,11 +44,11 @@ public partial class RatesPage : ContentPage
         _apiService = apiService;
 
         RefreshCommand = new Command(() => LoadPageContent());
-        
+
         InitializeComponent();
 
         BindingContext = this;
-        
+
         LoadPageContent();
     }
 

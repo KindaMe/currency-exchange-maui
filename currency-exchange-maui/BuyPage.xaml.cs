@@ -21,7 +21,7 @@ public partial class BuyPage : ContentPage
             OnPropertyChanged();
         }
     }
-    
+
     private bool _isButtonProcessing = false;
 
     public bool IsButtonProcessing
@@ -145,7 +145,7 @@ public partial class BuyPage : ContentPage
     private async void Button_OnClicked(object sender, EventArgs e)
     {
         IsButtonProcessing = true;
-        
+
         TransactionDto data;
 
         if (SourceCreditCard.IsChecked)
@@ -208,7 +208,7 @@ public partial class BuyPage : ContentPage
         }
 
         await Navigation.PopAsync();
-        
+
         IsButtonProcessing = false;
     }
 

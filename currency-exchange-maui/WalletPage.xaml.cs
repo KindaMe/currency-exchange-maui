@@ -129,7 +129,7 @@ public partial class WalletPage : ContentPage
     private void WithdrawButton_OnClicked(object sender, EventArgs e)
     {
         IsButtonProcessing = true;
-        
+
         var page = new WithdrawPage(_apiService, Wallets);
 
         page.Disappearing += (o, args) => LoadPageContent();
